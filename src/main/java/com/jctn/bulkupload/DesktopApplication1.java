@@ -1,8 +1,8 @@
 /*
- * MainApp.java
+ * DesktopApplication1.java
  */
 
-package com.junctionnetworks.bulkupload;
+package com.jctn.bulkupload;
 
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
@@ -10,13 +10,13 @@ import org.jdesktop.application.SingleFrameApplication;
 /**
  * The main class of the application.
  */
-public class MainApp extends SingleFrameApplication {
+public class DesktopApplication1 extends SingleFrameApplication {
 
     /**
      * At startup create and show the main frame of the application.
      */
     @Override protected void startup() {
-        show(new MainView(this));
+        show(new DesktopApplication1View(this));
     }
 
     /**
@@ -29,16 +29,16 @@ public class MainApp extends SingleFrameApplication {
 
     /**
      * A convenient static getter for the application instance.
-     * @return the instance of MainApp
+     * @return the instance of DesktopApplication1
      */
-    public static MainApp getApplication() {
-        return Application.getInstance(MainApp.class);
+    public static DesktopApplication1 getApplication() {
+        return Application.getInstance(DesktopApplication1.class);
     }
 
     /**
      * Main method launching the application.
      */
     public static void main(String[] args) {
-        launch(MainApp.class, args);
+        launch(DesktopApplication1.class, args);
     }
 }

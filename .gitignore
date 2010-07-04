@@ -1,3 +1,5 @@
 nbproject/
 build/
 dist/
+target/
+nb-configuration.xml

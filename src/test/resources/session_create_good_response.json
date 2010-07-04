@@ -1,0 +1,43 @@
+{
+  "Response" : {
+    "Context" : {
+      "Action" : {
+        "IsCompleted" : "true"
+      },
+      "Request" : {
+        "IsValid" : "true",
+        "DateTime" : "2010-07-04T12:54:05-04:00",
+        "Duration" : "31",
+        "Parameters" : {
+          "Parameter" : [ {
+            "Name" : "Username",
+            "Value" : "mccomputerconsulting"
+          }, {
+            "Name" : "Output",
+            "Value" : "json"
+          }, {
+            "Name" : "Action",
+            "Value" : "SessionCreate"
+          }, {
+            "Name" : "Password",
+            "Value" : "ons1pAcc3s5"
+          } ]
+        }
+      },
+      "Session" : {
+        "IsEstablished" : "true",
+        "SessionId" : "7ha22nvpmgnuj302tallnbisl0",
+        "UserId" : "30513",
+        "Roles" : {
+          "Role" : {
+            "Name" : "Account Admin"
+          }
+        }
+      }
+    },
+    "Result" : {
+      "SessionCreate" : {
+      }
+    }
+  }
+}
