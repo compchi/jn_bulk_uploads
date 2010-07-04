@@ -22,13 +22,6 @@ import org.apache.commons.httpclient.params.HttpMethodParams;
 public class HttpConnector {
 
     public String sendRequest(String url, Map<String, String> stringParams) throws IOException {
-        String username = "mccomputerconsulting";
-        String password = "ons1pAcc3s5";
-
-//        String params = "Username=" + username
-//                + "&Output=json"
-//                + "&Action=SessionCreate"
-//                + "&password=" + password;
 
         HttpClient client = new HttpClient();
         //clientParams.set
@@ -43,12 +36,6 @@ public class HttpConnector {
             HttpMethodParams methodParams = new HttpMethodParams();
             methodParams.setContentCharset("UTF-8");
             //Body
-//            NameValuePair[] body = new NameValuePair[]{
-//                new NameValuePair("Username", username),
-//                new NameValuePair("Output", "json"),
-//                new NameValuePair("Action", "SessionCreate"),
-//                new NameValuePair("password", password)
-//            };
             List<NameValuePair> body = new ArrayList(stringParams.size());
             for (String paramName : stringParams.keySet()) {
                 body.add(new NameValuePair(paramName, stringParams.get(paramName)));

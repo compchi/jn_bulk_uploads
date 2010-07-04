@@ -11,7 +11,7 @@
         "Parameters" : {
           "Parameter" : [ {
             "Name" : "Username",
-            "Value" : "mccomputerconsulting"
+            "Value" : "xxxxxx"
           }, {
             "Name" : "Output",
             "Value" : "json"
@@ -20,14 +20,14 @@
             "Value" : "SessionCreate"
           }, {
             "Name" : "Password",
-            "Value" : "ons1pAcc3s5"
+            "Value" : "xxxxx"
           } ]
         }
       },
       "Session" : {
         "IsEstablished" : "true",
         "SessionId" : "7ha22nvpmgnuj302tallnbisl0",
-        "UserId" : "30513",
+        "UserId" : "xxxxxx",
         "Roles" : {
           "Role" : {
             "Name" : "Account Admin"

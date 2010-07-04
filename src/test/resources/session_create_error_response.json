@@ -11,7 +11,7 @@
         "Parameters" : {
           "Parameter" : [ {
             "Name" : "Username",
-            "Value" : "mccomputerconsulting"
+            "Value" : "xxxxxxx"
           }, {
             "Name" : "Output",
             "Value" : "json"
@@ -20,7 +20,7 @@
             "Value" : "SessionCreate"
           }, {
             "Name" : "password",
-            "Value" : "ons1pAcc3s5"
+            "Value" : "xxxxxx"
           } ]
         },
         "Errors" : {
