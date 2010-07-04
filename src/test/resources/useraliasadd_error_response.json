@@ -1,0 +1,55 @@
+{
+  "Response" : {
+    "Context" : {
+      "Action" : {
+        "IsCompleted" : "false"
+      },
+      "Request" : {
+        "IsValid" : "false",
+        "DateTime" : "2010-07-04T18:05:29-04:00",
+        "Duration" : "21",
+        "Parameters" : {
+          "Parameter" : [ {
+            "Name" : "Action",
+            "Value" : "UserAliasAdd"
+          }, {
+            "Name" : "OrganizationId",
+            "Value" : "xxxxx"
+          }, {
+            "Name" : "SessionId",
+            "Value" : "mtfl198mppiqg2vuv2k8rd7vd1"
+          }, {
+            "Name" : "Output",
+            "Value" : "json"
+          }, {
+            "Name" : "AliasUsername",
+            "Value" : "7001"
+          }, {
+            "Name" : "Visibility",
+            "Value" : "PUBLIC"
+          }, {
+            "Name" : "AddressUsername",
+            "Value" : "testuser0"
+          } ]
+        },
+        "Errors" : {
+          "Error" : {
+            "Parameter" : "AliasUsername",
+            "Code" : "UserAlias.Unavailable",
+            "Message" : "This alias is already in use, is reserved, or is otherwise unavailable for use."
+          }
+        }
+      },
+      "Session" : {
+        "IsEstablished" : "true",
+        "SessionId" : "mtfl198mppiqg2vuv2k8rd7vd1",
+        "UserId" : "xxxxx",
+        "Roles" : {
+          "Role" : {
+            "Name" : "Account Admin"
+          }
+        }
+      }
+    }
+  }
+}

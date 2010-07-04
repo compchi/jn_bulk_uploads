@@ -1,0 +1,73 @@
+{
+  "Response" : {
+    "Context" : {
+      "Action" : {
+        "IsCompleted" : "true"
+      },
+      "Request" : {
+        "IsValid" : "true",
+        "DateTime" : "2010-07-04T17:17:23-04:00",
+        "Duration" : "24",
+        "Parameters" : {
+          "Parameter" : [ {
+            "Name" : "Action",
+            "Value" : "OrganizationRead"
+          }, {
+            "Name" : "Domain",
+            "Value" : "xxxx.onsip.com"
+          }, {
+            "Name" : "SessionId",
+            "Value" : "mtfl198mppiqg2vuv2k8rd7vd1"
+          }, {
+            "Name" : "Output",
+            "Value" : "json"
+          } ]
+        }
+      },
+      "Session" : {
+        "IsEstablished" : "true",
+        "SessionId" : "mtfl198mppiqg2vuv2k8rd7vd1",
+        "UserId" : "xxxxx",
+        "Roles" : {
+          "Role" : {
+            "Name" : "Account Admin"
+          }
+        }
+      }
+    },
+    "Result" : {
+      "OrganizationRead" : {
+        "Organization" : {
+          "OrganizationId" : "xxxxx",
+          "AccountId" : "xxxx",
+          "Service" : "hosted",
+          "Domain" : "xxxx.onsip.com",
+          "CallerId" : {
+          },
+          "CallerIdName" : {
+          },
+          "CallerIdNumber" : {
+          },
+          "Status" : "enabled",
+          "ExtendedDialing" : "false",
+          "E911Provisioning" : "false",
+          "Modified" : "2010-06-09T21:27:17-04:00",
+          "Created" : "2010-06-09T21:27:17-04:00",
+          "Contact" : {
+            "Name" : "xxxxxxx xxxxxxx",
+            "Organization" : "M.C. Computer Consulting",
+            "Address" : "xxxx",
+            "City" : "xxxxxx",
+            "State" : "xx",
+            "Zipcode" : "xxxxx",
+            "Country" : "United States of America",
+            "CountryId" : "207",
+            "Phone" : "1-xxx-xxx-xxxx",
+            "Email" : "xxxxxx@xxxxx",
+            "Modified" : "2010-06-09T21:27:17-04:00"
+          }
+        }
+      }
+    }
+  }
+}

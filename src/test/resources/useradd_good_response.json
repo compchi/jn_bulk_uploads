@@ -1,0 +1,104 @@
+{
+  "Response" : {
+    "Context" : {
+      "Action" : {
+        "IsCompleted" : "true"
+      },
+      "Request" : {
+        "IsValid" : "true",
+        "DateTime" : "2010-07-04T17:47:21-04:00",
+        "Duration" : "201",
+        "Parameters" : {
+          "Parameter" : [ {
+            "Name" : "Action",
+            "Value" : "UserAdd"
+          }, {
+            "Name" : "OrganizationId",
+            "Value" : "xxxxx"
+          }, {
+            "Name" : "SessionId",
+            "Value" : "mtfl198mppiqg2vuv2k8rd7vd1"
+          }, {
+            "Name" : "Output",
+            "Value" : "json"
+          }, {
+            "Name" : "Username",
+            "Value" : "testuser0"
+          }, {
+            "Name" : "Domain",
+            "Value" : "xxxxx.onsip.com"
+          }, {
+            "Name" : "Name",
+            "Value" : "Test User"
+          }, {
+            "Name" : "Email",
+            "Value" : "testuser0@xxxx.onsip.com"
+          }, {
+            "Name" : "AuthUsername",
+            "Value" : "testuser0"
+          }, {
+            "Name" : "Password",
+            "Value" : "xxxxx"
+          }, {
+            "Name" : "PasswordConfirm",
+            "Value" : "xxxxx"
+          } ]
+        }
+      },
+      "Session" : {
+        "IsEstablished" : "true",
+        "SessionId" : "mtfl198mppiqg2vuv2k8rd7vd1",
+        "UserId" : "30513",
+        "Roles" : {
+          "Role" : {
+            "Name" : "Account Admin"
+          }
+        }
+      }
+    },
+    "Result" : {
+      "UserAdd" : {
+        "User" : {
+          "UserId" : "xxxx",
+          "OrganizationId" : "xxx",
+          "AccountId" : "xxxx",
+          "Flags" : "0",
+          "Status" : "enabled",
+          "Domain" : "xxxx.onsip.com",
+          "Username" : "testuser0",
+          "Password" : "A3Hj7axKiQ7oXYgC",
+          "AuthUsername" : "testuser0",
+          "Modified" : "2010-07-04T17:47:21-04:00",
+          "Created" : "2010-07-04T17:47:21-04:00",
+          "Ack911" : "1969-12-31T19:00:00-05:00",
+          "SurveyCompleted" : "1969-12-31T19:00:00-05:00",
+          "AckTrunkingTerms" : "1969-12-31T19:00:00-05:00",
+          "AckTrunkingE911" : "1969-12-31T19:00:00-05:00",
+          "AckHostedTerms" : "1969-12-31T19:00:00-05:00",
+          "AckHostedE911" : "1969-12-31T19:00:00-05:00",
+          "ExtendedDialing" : "false",
+          "PSTNForwarding" : "false",
+          "E911Provisioning" : "false",
+          "Contact" : {
+            "Name" : "Test User",
+            "Organization" : "M.C. Computer Consulting",
+            "Address" : "xxxx",
+            "City" : "xxxx",
+            "State" : "xx",
+            "Zipcode" : "xxxxx",
+            "Country" : "United States of America",
+            "CountryId" : "207",
+            "Phone" : "1-xxx-xxx-xxxx",
+            "Email" : "testuser0@xxx.onsip.com",
+            "Modified" : "2010-07-04T17:47:21-04:00"
+          },
+          "Roles" : {
+            "Role" : {
+              "Name" : "User"
+            }
+          }
+        }
+      }
+    }
+  }
+}

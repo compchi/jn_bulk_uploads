@@ -1,0 +1,62 @@
+{
+  "Response" : {
+    "Context" : {
+      "Action" : {
+        "IsCompleted" : "true"
+      },
+      "Request" : {
+        "IsValid" : "true",
+        "DateTime" : "2010-07-04T18:04:23-04:00",
+        "Duration" : "37",
+        "Parameters" : {
+          "Parameter" : [ {
+            "Name" : "Action",
+            "Value" : "UserAliasAdd"
+          }, {
+            "Name" : "OrganizationId",
+            "Value" : "xxxxx"
+          }, {
+            "Name" : "SessionId",
+            "Value" : "mtfl198mppiqg2vuv2k8rd7vd1"
+          }, {
+            "Name" : "Output",
+            "Value" : "json"
+          }, {
+            "Name" : "AliasUsername",
+            "Value" : "7002"
+          }, {
+            "Name" : "Visibility",
+            "Value" : "PUBLIC"
+          }, {
+            "Name" : "AddressUsername",
+            "Value" : "testuser0"
+          } ]
+        }
+      },
+      "Session" : {
+        "IsEstablished" : "true",
+        "SessionId" : "mtfl198mppiqg2vuv2k8rd7vd1",
+        "UserId" : "xxxxx",
+        "Roles" : {
+          "Role" : {
+            "Name" : "Account Admin"
+          }
+        }
+      }
+    },
+    "Result" : {
+      "UserAliasAdd" : {
+        "UserAlias" : {
+          "AliasUsername" : "7002",
+          "AliasDomain" : "xxxx.onsip.com",
+          "AddressUsername" : "testuser0",
+          "AddressDomain" : "xxxx.onsip.com",
+          "AddressType" : "user",
+          "AddressName" : "Test User",
+          "AddressId" : "102078",
+          "AliasVisibility" : "PUBLIC"
+        }
+      }
+    }
+  }
+}
