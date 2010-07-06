@@ -9,11 +9,11 @@ import com.jctn.bulkupload.model.json.AbstractJSONResponse;
  */
 public interface JsonMapper<T extends AbstractJSONResponse> {
 
-    /**
-     * Given a JSON string, this method constructs an object of type T from
-     * that string.
-     * @param jsonString
-     * @return
-     */
-    T mapJson(String jsonString);
+	/**
+	 * Given a JSON string, this method constructs an object of type T from
+	 * that string.
+	 * @param jsonString
+	 * @return
+	 */
+	T mapJson(String jsonString);
 }

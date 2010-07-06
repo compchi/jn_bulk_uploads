@@ -14,18 +14,22 @@ import java.util.Map;
  */
 public abstract class AbstractJSONResponse implements Serializable {
 
-    static final String NAME_ERRORS = "Errors";
-    static final String NAME_ERROR = "Error";
-    static final String NAME_PARAMETER = "Parameter";
-    static final String NAME_CODE = "Code";
-    static final String NAME_MESSAGE = "Message";
-    private Map errors;
+	static final String NAME_ERRORS = "Errors";
+	static final String NAME_ERROR = "Error";
+	static final String NAME_PARAMETER = "Parameter";
+	static final String NAME_CODE = "Code";
+	static final String NAME_MESSAGE = "Message";
+	private Map errors;
 
-    public Map getErrors() {
-        return errors;
-    }
+	public Map getErrors() {
+		return errors;
+	}
 
-    public void setErrors(Map errors) {
-        this.errors = errors;
-    }
+	public void setErrors(Map errors) {
+		this.errors = errors;
+	}
+
+	public boolean hasError() {
+		return errors != null && !errors.isEmpty();
+	}
 }
