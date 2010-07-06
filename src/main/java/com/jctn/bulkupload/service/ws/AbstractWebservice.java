@@ -16,21 +16,35 @@ import org.json.simple.parser.ParseException;
  */
 public abstract class AbstractWebservice<T extends AbstractJSONResponse> implements JsonMapper<T> {
 
-	protected T parseError(Class<T> returnClass, String jsonString, JSONParser parser) throws ParseException, InstantiationException, IllegalAccessException {
-		T retValue = returnClass.newInstance();
+	protected void parseError(T responseObj, JSONObject parsedFile) {
 
-		JSONObject jsonObject = null;
-		jsonObject = (JSONObject) parser.parse(jsonString);
-		JSONObject response = (JSONObject) jsonObject.get("Response");
+		JSONObject response = (JSONObject) parsedFile.get("Response");
 		JSONObject context = (JSONObject) response.get("Context");
 		JSONObject request = (JSONObject) context.get("Request");
 		//Errors
 		JSONObject errors = (JSONObject) request.get("Errors");
 		if (errors != null) {
 			Map errMap = (Map) errors.get("Error");
-			retValue.setErrors(errMap);
+			responseObj.setErrors(errMap);
+		}
+	}
+
+	protected JSONObject parseResultAndError(T responseObj, String jsonString, String serviceName) throws ParseException {
+		if (responseObj == null) {
+			throw new IllegalArgumentException("responseObj cannot be null");
 		}
 
-		return retValue;
+		JSONObject resultObj = null;
+
+		JSONParser parser = new JSONParser();
+		JSONObject jsonObject = (JSONObject) parser.parse(jsonString);
+		parseError(responseObj, jsonObject);
+		JSONObject response = (JSONObject) jsonObject.get("Response");
+		JSONObject jresult = (JSONObject) response.get("Result");
+		if (jresult != null) {
+			resultObj = (JSONObject) jresult.get(serviceName);
+		}
+
+		return resultObj;
 	}
 }

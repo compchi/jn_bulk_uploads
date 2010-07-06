@@ -55,7 +55,7 @@ public class SessionCreate extends AbstractWebservice<SessionCreateResponse> {
 			jsonObject = (JSONObject) parser.parse(jsonString);
 			JSONObject response = (JSONObject) jsonObject.get("Response");
 			JSONObject context = (JSONObject) response.get("Context");
-			sessionCreateResponse = parseError(SessionCreateResponse.class, jsonString, parser);
+			parseError(sessionCreateResponse, jsonObject);
 			//Grab session info
 			JSONObject session = (JSONObject) context.get("Session");
 			Boolean sessionEstablished = Boolean.parseBoolean((String) session.get("IsEstablished"));
