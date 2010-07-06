@@ -59,7 +59,7 @@
     "Result" : {
       "UserAdd" : {
         "User" : {
-          "UserId" : "xxxx",
+          "UserId" : "12345",
           "OrganizationId" : "xxx",
           "AccountId" : "xxxx",
           "Flags" : "0",
