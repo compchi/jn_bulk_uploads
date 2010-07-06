@@ -1,0 +1,114 @@
+{
+  "Response" : {
+    "Context" : {
+      "Action" : {
+        "IsCompleted" : "true"
+      },
+      "Request" : {
+        "IsValid" : "true",
+        "DateTime" : "2010-07-05T23:18:48-04:00",
+        "Duration" : "45",
+        "Parameters" : {
+          "Parameter" : [ {
+            "Name" : "Action",
+            "Value" : "VoicemailboxAdd"
+          }, {
+            "Name" : "OrganizationId",
+            "Value" : "10755"
+          }, {
+            "Name" : "Domain",
+            "Value" : "mccomputerconsulting.onsip.com"
+          }, {
+            "Name" : "SessionId",
+            "Value" : "gnfp7tmm7qtvq5pjf4j41eahu7"
+          }, {
+            "Name" : "Output",
+            "Value" : "json"
+          }, {
+            "Name" : "Username",
+            "Value" : "vm.testuser0"
+          }, {
+            "Name" : "Mailbox",
+            "Value" : "7002"
+          }, {
+            "Name" : "VoicemailboxId",
+            "Value" : "7002"
+          }, {
+            "Name" : "Fullname",
+            "Value" : "Test User"
+          }, {
+            "Name" : "Name",
+            "Value" : "vm.testuser0"
+          }, {
+            "Name" : "Timezone",
+            "Value" : "us_eastern"
+          }, {
+            "Name" : "SayCallerId",
+            "Value" : "false"
+          }, {
+            "Name" : "SayDuration",
+            "Value" : "false"
+          }, {
+            "Name" : "SayDatetime",
+            "Value" : "false"
+          }, {
+            "Name" : "NotifyEmail",
+            "Value" : "no"
+          }, {
+            "Name" : "NotifyPager",
+            "Value" : "no"
+          } ]
+        }
+      },
+      "Session" : {
+        "IsEstablished" : "true",
+        "SessionId" : "gnfp7tmm7qtvq5pjf4j41eahu7",
+        "UserId" : "30513",
+        "Roles" : {
+          "Role" : {
+            "Name" : "Account Admin"
+          }
+        }
+      }
+    },
+    "Result" : {
+      "VoicemailboxAdd" : {
+        "Voicemailbox" : {
+          "VoicemailboxId" : "11452",
+          "OrganizationId" : "10755",
+          "AccountId" : "9377",
+          "Status" : "enabled",
+          "Mailbox" : "7002",
+          "Password" : "4978",
+          "Fullname" : "Test User",
+          "Timezone" : "us_eastern",
+          "SayCallerId" : "false",
+          "SayDuration" : "false",
+          "SayDatetime" : "false",
+          "NotifyEmail" : "no",
+          "NotifyPager" : "no",
+          "Email" : {
+          },
+          "Pager" : {
+          },
+          "Mwi" : {
+          },
+          "TransferAddress" : {
+            "Address" : {
+            },
+            "Username" : {
+            },
+            "Domain" : {
+            },
+            "Type" : {
+            },
+            "Name" : {
+            }
+          },
+          "Created" : "2010-07-05T23:18:48-04:00",
+          "Modified" : "2010-07-05T23:18:48-04:00"
+        }
+      }
+    }
+  }
+}
