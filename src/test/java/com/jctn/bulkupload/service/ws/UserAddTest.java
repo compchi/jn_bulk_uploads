@@ -4,7 +4,6 @@
  */
 package com.jctn.bulkupload.service.ws;
 
-import com.jctn.bulkupload.model.json.OrganizationReadResponse;
 import com.jctn.bulkupload.model.json.UserAddResponse;
 import java.io.IOException;
 import java.net.URISyntaxException;
