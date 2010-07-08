@@ -1,0 +1,113 @@
+{
+  "Response" : {
+    "Context" : {
+      "Action" : {
+        "IsCompleted" : "true"
+      },
+      "Request" : {
+        "IsValid" : "true",
+        "DateTime" : "2010-07-07T22:01:02-04:00",
+        "Duration" : "58",
+        "Parameters" : {
+          "Parameter" : [ {
+            "Name" : "Action",
+            "Value" : "UserAddressEdit"
+          }, {
+            "Name" : "SessionId",
+            "Value" : "2epc1f026lfiov7g02urp981i4"
+          }, {
+            "Name" : "Output",
+            "Value" : "json"
+          }, {
+            "Name" : "UserId",
+            "Value" : "31528"
+          }, {
+            "Name" : "Username",
+            "Value" : "testuser0"
+          }, {
+            "Name" : "Timeout",
+            "Value" : "20"
+          }, {
+            "Name" : "Address",
+            "Value" : "testuser0@mccomputerconsulting.onsip.com"
+          }, {
+            "Name" : "DefaultAddress",
+            "Value" : "vm.testuser0@mccomputerconsulting.onsip.com"
+          }, {
+            "Name" : "Name",
+            "Value" : "Test User"
+          } ]
+        }
+      },
+      "Session" : {
+        "IsEstablished" : "true",
+        "SessionId" : "2epc1f026lfiov7g02urp981i4",
+        "UserId" : "30513",
+        "Roles" : {
+          "Role" : {
+            "Name" : "Account Admin"
+          }
+        }
+      }
+    },
+    "Result" : {
+      "UserAddressEdit" : {
+        "UserAddress" : {
+          "UserId" : "31528",
+          "AuthUsername" : "testuser0",
+          "AuthPassword" : "A3Hj7axKiQ7oXYgC",
+          "Timeout" : "20",
+          "DefaultAddress" : {
+            "Username" : "vm.testuser0",
+            "Domain" : "mccomputerconsulting.onsip.com",
+            "Type" : "voicemail",
+            "Name" : "Test User"
+          },
+          "E911LocationId" : {
+          },
+          "DoNotDisturb" : "false",
+          "Address" : {
+            "AddressId" : "102078",
+            "Username" : "testuser0",
+            "Domain" : "mccomputerconsulting.onsip.com",
+            "Type" : "user",
+            "Name" : "Test User",
+            "Modified" : "2010-07-04T18:42:06-04:00",
+            "Created" : "2010-07-04T17:47:21-04:00",
+            "CplText" : "<cpl xmlns=\"urn:ietf:params:xml:ns:cpl\">\n <subaction id=\"default-action\">\n  <location url=\"sip:vm.testuser0@mccomputerconsulting.onsip.com\" clear=\"yes\">\n   <proxy recurse=\"yes\" timeout=\"120\" ordering=\"parallel\"/>\n  </location>\n </subaction>\n <incoming>\n  <lookup source=\"registration\">\n   <success>\n    <proxy recurse=\"yes\" timeout=\"20\" ordering=\"parallel\">\n     <busy>\n      <sub ref=\"default-action\"/>\n     </busy>\n     <noanswer>\n      <sub ref=\"default-action\"/>\n     </noanswer>\n     <redirection>\n      <sub ref=\"default-action\"/>\n     </redirection>\n     <failure>\n      <sub ref=\"default-action\"/>\n     </failure>\n     <default>\n      <sub ref=\"default-action\"/>\n     </default>\n    </proxy>\n   </success>\n   <notfound>\n    <sub ref=\"default-action\"/>\n   </notfound>\n   <failure>\n    <sub ref=\"default-action\"/>\n   </failure>\n  </lookup>\n </incoming>\n</cpl>"
+          }
+        },
+        "Organization" : {
+          "OrganizationId" : "10755",
+          "AccountId" : "9377",
+          "Service" : "hosted",
+          "Domain" : "mccomputerconsulting.onsip.com",
+          "CallerId" : {
+          },
+          "CallerIdName" : {
+          },
+          "CallerIdNumber" : {
+          },
+          "Status" : "enabled",
+          "ExtendedDialing" : "false",
+          "E911Provisioning" : "false",
+          "Modified" : "2010-06-09T21:27:17-04:00",
+          "Created" : "2010-06-09T21:27:17-04:00",
+          "Contact" : {
+            "Name" : "Martin Constantine",
+            "Organization" : "M.C. Computer Consulting",
+            "Address" : "57 Llewellyn Ave",
+            "City" : "Bloomfield",
+            "State" : "NJ",
+            "Zipcode" : "07003",
+            "Country" : "United States of America",
+            "CountryId" : "207",
+            "Phone" : "1-973-866-0038",
+            "Email" : "mccomputerconsulting@gmail.com",
+            "Modified" : "2010-06-09T21:27:17-04:00"
+          }
+        }
+      }
+    }
+  }
+}

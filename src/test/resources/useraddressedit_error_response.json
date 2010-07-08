@@ -1,0 +1,55 @@
+{
+  "Response" : {
+    "Context" : {
+      "Action" : {
+        "IsCompleted" : "false"
+      },
+      "Request" : {
+        "IsValid" : "false",
+        "DateTime" : "2010-07-07T22:04:46-04:00",
+        "Duration" : "19",
+        "Parameters" : {
+          "Parameter" : [ {
+            "Name" : "Action",
+            "Value" : "UserAddressEdit"
+          }, {
+            "Name" : "SessionId",
+            "Value" : "2epc1f026lfiov7g02urp981i4"
+          }, {
+            "Name" : "Output",
+            "Value" : "json"
+          }, {
+            "Name" : "UserId",
+            "Value" : "31528"
+          }, {
+            "Name" : "Username",
+            "Value" : "testuser0"
+          }, {
+            "Name" : "Timeout",
+            "Value" : "20"
+          }, {
+            "Name" : "DefaultAddress",
+            "Value" : "vm.testuser0@mccomputerconsulting.onsip.com"
+          } ]
+        },
+        "Errors" : {
+          "Error" : {
+            "Parameter" : "Address",
+            "Code" : "Value.Required",
+            "Message" : "This value is required."
+          }
+        }
+      },
+      "Session" : {
+        "IsEstablished" : "true",
+        "SessionId" : "2epc1f026lfiov7g02urp981i4",
+        "UserId" : "30513",
+        "Roles" : {
+          "Role" : {
+            "Name" : "Account Admin"
+          }
+        }
+      }
+    }
+  }
+}
