@@ -38,7 +38,7 @@ public class SessionCreateTest extends AbstractJunctionWSTest {
 
 		String jsonString = loadTestResource("/session_create_error_response.json");
 
-		SessionCreate instance = new SessionCreate(null, null);
+		SessionCreate instance = new SessionCreate();
 		SessionCreateResponse expResult = new SessionCreateResponse();
 		Map errMap = new JSONObject();
 		errMap.put("Parameter", "Password");
@@ -55,7 +55,7 @@ public class SessionCreateTest extends AbstractJunctionWSTest {
 
 		String jsonString = loadTestResource("/session_create_good_response.json");
 
-		SessionCreate instance = new SessionCreate(null, null);
+		SessionCreate instance = new SessionCreate();
 		SessionCreateResponse result = instance.mapJson(jsonString);
 		assertNull(result.getErrors());
 		assertEquals("Account Admin", result.getRoles().get(0));

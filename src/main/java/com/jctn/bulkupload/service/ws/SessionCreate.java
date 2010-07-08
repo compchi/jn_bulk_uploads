@@ -15,30 +15,9 @@ import org.json.simple.parser.JSONParser;
 public class SessionCreate extends AbstractWebservice<SessionCreateResponse> {
 
 	private String url = "https://www.jnctn.com/restapi";
-	private final String username;
-	private final String password;
 
-	/**
-	 *
-	 * @param username
-	 * @param password
-	 */
-	public SessionCreate(final String username, final String password) {
-		this.username = username;
-		this.password = password;
-	}
-
-	/**
-	 *
-	 * @return
-	 */
-	public SessionCreateResponse execute() {
-		String params = "Username=" + username
-				+ "&Output=json"
-				+ "&Action=SessionCreate"
-				+ "&password=" + password;
-
-		return new SessionCreateResponse();
+	public SessionCreate() {
+		super.action = "SessionCreate";
 	}
 
 	/**
