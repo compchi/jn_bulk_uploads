@@ -6,13 +6,18 @@ package com.jctn.bulkupload.controller;
 
 import com.jctn.bulkupload.model.User;
 import com.jctn.bulkupload.model.json.AbstractJSONResponse;
+import com.jctn.bulkupload.model.json.OrganizationReadResponse;
 import com.jctn.bulkupload.model.json.SessionCreateResponse;
+import com.jctn.bulkupload.model.json.UserAddResponse;
+import com.jctn.bulkupload.service.ws.OrganizationRead;
 import com.jctn.bulkupload.service.ws.SessionCreate;
 import com.jctn.bulkupload.service.ws.UserAdd;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.apache.log4j.Logger;
 
@@ -29,12 +34,14 @@ public class BulkUserAddController {
 	private String adminPassword;
 	private String adminDomain;
 	private String sessionId;
+	private Long organizationId;
 
 	public BulkUserAddController(String adminUsername, String adminPassword, String adminDomain) {
 		this.adminUsername = adminUsername;
 		this.adminPassword = adminPassword;
 		this.adminDomain = adminDomain;
 		this.sessionId = createSession(adminUsername, adminPassword, adminDomain);
+		this.organizationId = fetchOrganizationId(adminDomain);
 	}
 
 	public String getSessionId() {
@@ -84,11 +91,30 @@ public class BulkUserAddController {
 		}
 	}
 
-	private void uploadSingleUser(User user) {
-		//add user--UserAdd
-		UserAdd userAdd = new UserAdd();
+	private void uploadSingleUser(User user) throws IOException {
+
 		Map params = new HashMap();
 		params.put(UserAdd.PARAM_SESSION_ID, this.sessionId);
+
+		//add user--UserAdd
+		UserAdd userAdd = new UserAdd();
+		params.put(UserAdd.PARAM_ORGANIZATION_ID, this.organizationId + "");
+		params.put(UserAdd.PARAM_USERNAME, user.getUsername());
+		params.put(UserAdd.PARAM_AUTH_USERNAME, user.getUsername());
+		params.put(UserAdd.PARAM_PASSWORD, user.getPassword());
+		params.put(UserAdd.PARAM_PASSWORD_CONFIRM, user.getPassword());
+		params.put(UserAdd.PARAM_EMAIL, user.getEmail());
+		params.put(UserAdd.PARAM_DOMAIN, this.adminDomain);
+		params.put(UserAdd.PARAM_NAME, user.getFullName());
+		UserAddResponse response = userAdd.sendRequest(params);
+		if (validateResponse(response)) {
+			user.setUserAdded(true);
+			user.setUserId(response.getUserId());
+		} else {
+			user.setUserAdded(false);
+			user.setError(constructErrorString(response.getErrors()));
+		}
+
 		//add extension--UserAliasAdd
 		//add vm box--VoicemailoboxAdd
 		//link user to vm--UserAddressEdit.
@@ -110,18 +136,74 @@ public class BulkUserAddController {
 			sessionId_ = response.getSessionId();
 		} catch (Exception e) {
 			handleError("Error creating session.", e);
+			throw new IllegalStateException(e);
 		}
 		return sessionId_;
 	}
 
 	private <T extends AbstractJSONResponse> boolean validateResponse(T response) {
-		//TODO implement based on type of T. E.g. is T instanceof SessionCreateResponse, check the role, etc
+		if (response == null) {
+			handleError("Null response", new IllegalStateException("Response object is null"));
+			return false;
+		}
 
-		return true;
+		if (!response.hasError()) {
+			//check the role if this is a sessioncreateresponse. This is a logical error check
+			if (response instanceof SessionCreateResponse) {
+				SessionCreateResponse sessionCreateResponse = (SessionCreateResponse) response;
+				List<String> roles = sessionCreateResponse.getRoles();
+				if (!roles.contains(SessionCreateResponse.ROLE_ACCOUNT_ADMIN)) {
+					handleError("Permission denied", new IllegalArgumentException("User does not have sufficient priviliges."));
+					return false;
+				}
+			}
+			return true;
+		}
+
+		//We know we have an error here so we'll just let the user know what it was.
+		String errorStr = constructErrorString(response.getErrors());
+		handleError("Error in response: " + errorStr, new IllegalStateException("Response error"));
+		return false;
 	}
 
 	private void handleError(String string, Exception e) {
 		logger.error(string, e);
+
 		//throw new UnsupportedOperationException("Not yet implemented");
+	}
+
+	private Long fetchOrganizationId(String adminDomain) {
+		Map params = new HashMap();
+		params.put(UserAdd.PARAM_SESSION_ID, this.sessionId);
+		//get the organization ID via OrgRead
+		OrganizationRead orgRead = new OrganizationRead();
+		params.put(OrganizationRead.PARAM_DOMAIN, adminDomain);
+
+		OrganizationReadResponse orgReadResponse = null;
+
+		try {
+			orgReadResponse = orgRead.sendRequest(params);
+			if (!validateResponse(orgReadResponse)) {
+				throw new IllegalStateException("Response validation failed");
+			}
+
+		} catch (Exception e) {
+			handleError("Error reading organization", e);
+			throw new IllegalStateException(e);
+		}
+
+		return orgReadResponse.getOrgId();
+	}
+
+	private String constructErrorString(Map<String, String> errorMap) {
+		String errorStr = "";
+		for (String errorKey : errorMap.keySet()) {
+			errorStr += errorKey + "=>" + errorMap.get(errorKey) + ",";
+		}
+
+		if (errorStr.endsWith(",")) {
+			errorStr = errorStr.substring(0, errorStr.length() - 1);
+		}
+		return errorStr;
 	}
 }

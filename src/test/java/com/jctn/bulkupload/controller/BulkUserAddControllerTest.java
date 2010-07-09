@@ -4,6 +4,9 @@
  */
 package com.jctn.bulkupload.controller;
 
+import com.jctn.bulkupload.model.User;
+import java.util.ArrayList;
+import java.util.Collection;
 import junit.framework.TestCase;
 import org.apache.commons.lang.StringUtils;
 
@@ -12,6 +15,7 @@ import org.apache.commons.lang.StringUtils;
  * @author martin
  */
 public class BulkUserAddControllerTest extends TestCase {
+	private BulkUserAddController controller;
 
 	public BulkUserAddControllerTest(String testName) {
 		super(testName);
@@ -20,18 +24,19 @@ public class BulkUserAddControllerTest extends TestCase {
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
+		controller = new BulkUserAddController("mccomputerconsulting", "ons1pAcc3s5", "mccomputerconsulting.onsip.com");
 	}
 
 	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
+		controller = null;
 	}
 
 	public void testInitialize() throws Exception {
 		System.out.println("testInitialize");
-		BulkUserAddController instance = new BulkUserAddController("mccomputerconsulting", "ons1pAcc3s5", null);
-		assertNotNull(instance.getSessionId());
-		assertTrue(StringUtils.isNotBlank(instance.getSessionId()));
+		assertNotNull(controller.getSessionId());
+		assertTrue(StringUtils.isNotBlank(controller.getSessionId()));
 	}
 
 	/**
@@ -52,11 +57,15 @@ public class BulkUserAddControllerTest extends TestCase {
 	 * Test of bulkUpload method, of class BulkUserAddController.
 	 */
 	public void testBulkUpload() {
-//		System.out.println("bulkUpload");
-//		Collection<User> users = null;
-//		BulkUserAddController instance = null;
-//		instance.bulkUpload(users);
-//		// TODO review the generated test code and remove the default call to fail.
-//		fail("The test case is a prototype.");
+		System.out.println("bulkUpload");
+		Collection<User> users = new ArrayList<User>(1);
+		User user = new User();
+		user.setEmail("testuser1@mccomputerconsulting.onsip.com");
+		user.setFirstName("Test2");
+		user.setLastName("User2");
+		users.add(user);
+
+		//This is really an integration test.
+		//controller.bulkUpload(users);
 	}
 }

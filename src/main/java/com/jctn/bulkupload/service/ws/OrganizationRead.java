@@ -12,6 +12,11 @@ import org.json.simple.JSONObject;
  * @author martin
  */
 public class OrganizationRead extends AbstractWebservice<OrganizationReadResponse> {
+	public static final String PARAM_DOMAIN = "Domain";
+
+	public OrganizationRead() {
+		super.action = "OrganizationRead";
+	}
 
 	@Override
 	public OrganizationReadResponse mapJson(String jsonString) {

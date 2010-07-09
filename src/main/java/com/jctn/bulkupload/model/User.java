@@ -4,6 +4,10 @@
  */
 package com.jctn.bulkupload.model;
 
+import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
+
 /**
  * POJO representing a single user. This will likely be a row in some CSV input file.
  * @author martin
@@ -15,6 +19,26 @@ public class User {
 	private String email;
 	private Integer extension;
 	private boolean addVoicemail;
+	private String password;
+	private boolean userAdded;
+	private Long userId;
+	private String error;
+
+	public String getError() {
+		return error;
+	}
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public boolean isUserAdded() {
+		return userAdded;
+	}
+
+	public void setUserAdded(boolean userAdded) {
+		this.userAdded = userAdded;
+	}
 
 	public boolean isAddVoicemail() {
 		return addVoicemail;
@@ -59,5 +83,32 @@ public class User {
 	@Override
 	public String toString() {
 		return "User{" + "firstName=" + firstName + "lastName=" + lastName + "email=" + email + "extension=" + extension + "addVoicemail=" + addVoicemail + '}';
+	}
+
+	public String getUsername() {
+		return  StringUtils.lowerCase(firstName + "_" + lastName);
+	}
+
+	public String getAuthUsername(){
+		return getUsername();
+	}
+
+	public String getPassword() {
+		if (password == null) {
+			password = RandomStringUtils.randomAlphanumeric(8);
+		}
+		return password;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+
+	public void setError(String errorString) {
+		this.error = errorString;
+	}
+
+	public String getFullName() {
+		return firstName + " " + lastName;
 	}
 }

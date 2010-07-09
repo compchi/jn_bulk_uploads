@@ -6,7 +6,9 @@ package com.jctn.bulkupload.service.ws;
 
 import com.jctn.bulkupload.model.json.AbstractJSONResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -65,11 +67,28 @@ public abstract class AbstractWebservice<T extends AbstractJSONResponse> impleme
 		JSONObject context = (JSONObject) response.get("Context");
 		JSONObject request = (JSONObject) context.get("Request");
 		//Errors
-		JSONObject errors = (JSONObject) request.get("Errors");
-		if (errors != null) {
-			Map errMap = (Map) errors.get("Error");
-			responseObj.setErrors(errMap);
+		JSONObject errorsObj = (JSONObject) request.get("Errors");
+		if(errorsObj == null){
+			return;
 		}
+
+		Object errorObj = errorsObj.get("Error");
+		if (errorObj instanceof JSONObject) {
+			JSONObject singleError = (JSONObject) errorObj;
+			responseObj.setErrors(getFirstError(singleError));
+		} else {
+			//There were mulitple errors so just grab the first one and ignore the others for now
+			JSONArray manyErrors = (JSONArray) errorObj;
+			responseObj.setErrors(getFirstError((JSONObject) manyErrors.get(0)));
+		}
+	}
+
+	private Map getFirstError(JSONObject errorObj) {
+		if (errorObj != null) {
+			Map errMap = errorObj;
+			return errMap;
+		}
+		return null;
 	}
 
 	protected JSONObject parseResultAndError(T responseObj, String jsonString, String serviceName) throws ParseException {
