@@ -7,8 +7,10 @@ package com.jctn.bulkupload.controller;
 import com.jctn.bulkupload.model.json.UserAliasAddResponse;
 import com.jctn.bulkupload.service.ws.UserAliasAdd;
 import com.jctn.bulkupload.model.User;
+import com.jctn.bulkupload.model.json.VoicemailboxAddResponse;
 import com.jctn.bulkupload.service.ws.AbstractJunctionWSTest;
 import com.jctn.bulkupload.service.ws.HttpConnector;
+import com.jctn.bulkupload.service.ws.VoicemailboxAdd;
 import java.util.ArrayList;
 import java.util.Collection;
 import org.apache.commons.lang.StringUtils;
@@ -115,6 +117,43 @@ public class BulkUserAddControllerTest extends AbstractJunctionWSTest {
 
 		controller.execUserAliasAdd(testUser, userAliasAdd);
 		verify(testUser).setExtensionAdded(false);
+		verify(testUser, atLeastOnce()).setError(anyString());
+	}
+
+	public void testExecVoicemailBoxAddGood() throws Exception {
+		System.out.println("execVoicemailBoxAddGood");
+		String goodResponseStr = loadTestResource("/voicemailadd_good_response.json");
+		HttpConnector connector = mock(HttpConnector.class);
+		when(connector.sendRequest(anyString(), anyMap())).thenReturn(goodResponseStr);
+
+		VoicemailboxAdd service = new VoicemailboxAdd();
+		VoicemailboxAddResponse response = service.mapJson(goodResponseStr);
+
+		VoicemailboxAdd mockService = mock(VoicemailboxAdd.class);
+		mockService.setHttpConnector(connector);
+		when(mockService.sendRequest(anyMap())).thenReturn(response);
+
+		controller.execVoicemailBoxAdd(testUser, mockService);
+		verify(testUser).setVmMailBoxId(11452L);
+		verify(testUser).setVmPassword(4978);
+		verify(testUser).setVmBoxAdded(true);
+	}
+
+	public void testExecVoicemailBoxAddError() throws Exception {
+		System.out.println("execVoicemailBoxAddError");
+		String errResponse = loadTestResource("/voicemailadd_error_response.json");
+		HttpConnector connector = mock(HttpConnector.class);
+		when(connector.sendRequest(anyString(), anyMap())).thenReturn(errResponse);
+
+		VoicemailboxAdd service = new VoicemailboxAdd();
+		VoicemailboxAddResponse response = service.mapJson(errResponse);
+
+		VoicemailboxAdd mockService = mock(VoicemailboxAdd.class);
+		mockService.setHttpConnector(connector);
+		when(mockService.sendRequest(anyMap())).thenReturn(response);
+
+		controller.execVoicemailBoxAdd(testUser, mockService);
+		verify(testUser).setVmBoxAdded(false);
 		verify(testUser, atLeastOnce()).setError(anyString());
 	}
 }

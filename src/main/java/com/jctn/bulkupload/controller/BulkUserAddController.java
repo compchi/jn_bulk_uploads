@@ -10,10 +10,13 @@ import com.jctn.bulkupload.model.json.OrganizationReadResponse;
 import com.jctn.bulkupload.model.json.SessionCreateResponse;
 import com.jctn.bulkupload.model.json.UserAddResponse;
 import com.jctn.bulkupload.model.json.UserAliasAddResponse;
+import com.jctn.bulkupload.model.json.VoicemailboxAddResponse;
 import com.jctn.bulkupload.service.ws.OrganizationRead;
 import com.jctn.bulkupload.service.ws.SessionCreate;
 import com.jctn.bulkupload.service.ws.UserAdd;
+import com.jctn.bulkupload.service.ws.UserAddressEdit;
 import com.jctn.bulkupload.service.ws.UserAliasAdd;
+import com.jctn.bulkupload.service.ws.VoicemailboxAdd;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -108,15 +111,18 @@ public class BulkUserAddController {
 
 	private void uploadSingleUser(User user) throws IOException {
 
-
-
 		//add user--UserAdd
 		execUserAdd(user);
 
 		//add extension--UserAliasAdd
 		execUserAliasAdd(user, new UserAliasAdd());
 
+		//If the user doesn't want voice mail, we're done.
+		if (!user.isAddVoicemail()) {
+			return;
+		}
 		//add vm box--VoicemailoboxAdd
+		execVoicemailBoxAdd(user, new VoicemailboxAdd());
 		//link user to vm--UserAddressEdit.
 	}
 
@@ -251,6 +257,34 @@ public class BulkUserAddController {
 		} else {
 			logger.debug("Failed to retrieve user alias.");
 			user.setExtensionAdded(false);
+			user.setError(constructErrorString(response.getErrors()));
+		}
+	}
+
+	/**
+	 * Adds a voicemail box to the current organization. The mailbox is intended to be linked to the given user.
+	 * This method does NOT link the mail box. That must be done in a separate operation via {@linkplain UserAddressEdit}
+	 * @param user
+	 * @param voicemailboxAdd
+	 * @throws IOException
+	 */
+	void execVoicemailBoxAdd(User user, VoicemailboxAdd voicemailboxAdd) throws IOException {
+		Map params = new HashMap();
+		params.put(VoicemailboxAdd.PARAM_SESSION_ID, getSessionId());
+		params.put(VoicemailboxAdd.PARAM_ORGANIZATION_ID, getOrganizationId() + "");
+		params.put(VoicemailboxAdd.PARAM_USERNAME, user.getVmUsername());
+		params.put(VoicemailboxAdd.PARAM_FULLNAME, user.getFullName());
+		params.put(VoicemailboxAdd.PARAM_MAILBOX, user.getExtension() + "");
+		params.put(VoicemailboxAdd.PARAM_VMBOX_ID, user.getExtension() + "");
+		VoicemailboxAddResponse response = voicemailboxAdd.sendRequest(params);
+		if (validateResponse(response)) {
+			logger.debug("Mailbox added: " + response.getVmBoxId());
+			user.setVmMailBoxId(response.getVmBoxId());
+			user.setVmPassword(response.getPassword());
+			user.setVmBoxAdded(true);
+		} else {
+			logger.debug("Failed to add voicemail box.");
+			user.setVmBoxAdded(false);
 			user.setError(constructErrorString(response.getErrors()));
 		}
 	}

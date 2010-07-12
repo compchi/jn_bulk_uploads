@@ -23,6 +23,10 @@ public class User {
 	private Long userId;
 	private String error;
 	private boolean extensionAdded;
+	private Long vmMailBoxId;
+	private Integer vmPassword;
+	private boolean vmBoxAdded;
+	private boolean vmBoxLinked;
 
 	public String getError() {
 		return error;
@@ -114,5 +118,45 @@ public class User {
 
 	public void setExtensionAdded(boolean extAdded) {
 		this.extensionAdded = extAdded;
+	}
+
+	public boolean isExtensionAdded() {
+		return extensionAdded;
+	}
+
+	public String getVmUsername() {
+		return "vm." + getUsername();
+	}
+
+	public Long getVmMailBoxId() {
+		return vmMailBoxId;
+	}
+
+	public void setVmMailBoxId(Long vmMailBoxId) {
+		this.vmMailBoxId = vmMailBoxId;
+	}
+
+	public boolean isVmBoxAdded() {
+		return vmBoxAdded;
+	}
+
+	public void setVmBoxAdded(boolean vmBoxAdded) {
+		this.vmBoxAdded = vmBoxAdded;
+	}
+
+	public boolean isVmBoxLinked() {
+		return vmBoxLinked;
+	}
+
+	public void setVmBoxLinked(boolean vmBoxLinked) {
+		this.vmBoxLinked = vmBoxLinked;
+	}
+
+	public Integer getVmPassword() {
+		return vmPassword;
+	}
+
+	public void setVmPassword(Integer vmPassword) {
+		this.vmPassword = vmPassword;
 	}
 }
