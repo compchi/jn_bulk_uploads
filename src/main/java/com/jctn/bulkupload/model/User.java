@@ -5,7 +5,6 @@
 package com.jctn.bulkupload.model;
 
 import org.apache.commons.lang.RandomStringUtils;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -23,6 +22,7 @@ public class User {
 	private boolean userAdded;
 	private Long userId;
 	private String error;
+	private boolean extensionAdded;
 
 	public String getError() {
 		return error;
@@ -86,10 +86,10 @@ public class User {
 	}
 
 	public String getUsername() {
-		return  StringUtils.lowerCase(firstName + "_" + lastName);
+		return StringUtils.lowerCase(firstName + "_" + lastName);
 	}
 
-	public String getAuthUsername(){
+	public String getAuthUsername() {
 		return getUsername();
 	}
 
@@ -110,5 +110,9 @@ public class User {
 
 	public String getFullName() {
 		return firstName + " " + lastName;
+	}
+
+	public void setExtensionAdded(boolean extAdded) {
+		this.extensionAdded = extAdded;
 	}
 }

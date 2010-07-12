@@ -6,7 +6,6 @@ package com.jctn.bulkupload.service.ws;
 
 import com.jctn.bulkupload.model.json.AbstractJSONResponse;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -25,7 +24,7 @@ public abstract class AbstractWebservice<T extends AbstractJSONResponse> impleme
 	private static final String BASE_SERVICE_URL = "https://www.jnctn.com/restapi";
 	private static final String PARAM_OUTPUT = "Output";
 	private static final String PARAM_ACTION = "Action";
-	private static final HttpConnector httpConnector = new HttpConnector();
+	private HttpConnector httpConnector;
 	/**
 	 * Name for parameter for the session id.
 	 */
@@ -47,6 +46,10 @@ public abstract class AbstractWebservice<T extends AbstractJSONResponse> impleme
 		this.sessionId = sessionId;
 	}
 
+	public void setHttpConnector(HttpConnector httpConnector) {
+		this.httpConnector = httpConnector;
+	}
+
 	/**
 	 * Sends a RESTful request to the service with the given parameters. Work is
 	 * delegated to {@link HttpConnector#sendRequest(java.lang.String, java.util.Map) HttpConnector.sendRequest}
@@ -57,6 +60,9 @@ public abstract class AbstractWebservice<T extends AbstractJSONResponse> impleme
 	public T sendRequest(Map parameters) throws IOException {
 		parameters.put(PARAM_OUTPUT, DEFAULT_RESPONSE_FORMAT);
 		parameters.put(PARAM_ACTION, this.action);
+		if (httpConnector == null) {
+			httpConnector = new HttpConnector();
+		}
 		String response = httpConnector.sendRequest(BASE_SERVICE_URL, parameters);
 		return mapJson(response);
 	}
@@ -68,7 +74,7 @@ public abstract class AbstractWebservice<T extends AbstractJSONResponse> impleme
 		JSONObject request = (JSONObject) context.get("Request");
 		//Errors
 		JSONObject errorsObj = (JSONObject) request.get("Errors");
-		if(errorsObj == null){
+		if (errorsObj == null) {
 			return;
 		}
 

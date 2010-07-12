@@ -9,9 +9,11 @@ import com.jctn.bulkupload.model.json.AbstractJSONResponse;
 import com.jctn.bulkupload.model.json.OrganizationReadResponse;
 import com.jctn.bulkupload.model.json.SessionCreateResponse;
 import com.jctn.bulkupload.model.json.UserAddResponse;
+import com.jctn.bulkupload.model.json.UserAliasAddResponse;
 import com.jctn.bulkupload.service.ws.OrganizationRead;
 import com.jctn.bulkupload.service.ws.SessionCreate;
 import com.jctn.bulkupload.service.ws.UserAdd;
+import com.jctn.bulkupload.service.ws.UserAliasAdd;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,16 +38,29 @@ public class BulkUserAddController {
 	private String sessionId;
 	private Long organizationId;
 
-	public BulkUserAddController(String adminUsername, String adminPassword, String adminDomain) {
+	public BulkUserAddController(String adminUsername, String adminPassword, String adminDomain, boolean createSession) {
 		this.adminUsername = adminUsername;
 		this.adminPassword = adminPassword;
 		this.adminDomain = adminDomain;
+		if (createSession) {
+			initSession();
+		}
+	}
+
+	/**
+	 * Initializes the session by fetching a new session id and the current organization ID.
+	 */
+	public final void initSession() {
 		this.sessionId = createSession(adminUsername, adminPassword, adminDomain);
 		this.organizationId = fetchOrganizationId(adminDomain);
 	}
 
 	public String getSessionId() {
 		return sessionId;
+	}
+
+	public Long getOrganizationId() {
+		return organizationId;
 	}
 
 	public void setAdminDomain(String adminDomain) {
@@ -93,29 +108,14 @@ public class BulkUserAddController {
 
 	private void uploadSingleUser(User user) throws IOException {
 
-		Map params = new HashMap();
-		params.put(UserAdd.PARAM_SESSION_ID, this.sessionId);
+
 
 		//add user--UserAdd
-		UserAdd userAdd = new UserAdd();
-		params.put(UserAdd.PARAM_ORGANIZATION_ID, this.organizationId + "");
-		params.put(UserAdd.PARAM_USERNAME, user.getUsername());
-		params.put(UserAdd.PARAM_AUTH_USERNAME, user.getUsername());
-		params.put(UserAdd.PARAM_PASSWORD, user.getPassword());
-		params.put(UserAdd.PARAM_PASSWORD_CONFIRM, user.getPassword());
-		params.put(UserAdd.PARAM_EMAIL, user.getEmail());
-		params.put(UserAdd.PARAM_DOMAIN, this.adminDomain);
-		params.put(UserAdd.PARAM_NAME, user.getFullName());
-		UserAddResponse response = userAdd.sendRequest(params);
-		if (validateResponse(response)) {
-			user.setUserAdded(true);
-			user.setUserId(response.getUserId());
-		} else {
-			user.setUserAdded(false);
-			user.setError(constructErrorString(response.getErrors()));
-		}
+		execUserAdd(user);
 
 		//add extension--UserAliasAdd
+		execUserAliasAdd(user, new UserAliasAdd());
+
 		//add vm box--VoicemailoboxAdd
 		//link user to vm--UserAddressEdit.
 	}
@@ -174,7 +174,7 @@ public class BulkUserAddController {
 
 	private Long fetchOrganizationId(String adminDomain) {
 		Map params = new HashMap();
-		params.put(UserAdd.PARAM_SESSION_ID, this.sessionId);
+		params.put(UserAdd.PARAM_SESSION_ID, getSessionId());
 		//get the organization ID via OrgRead
 		OrganizationRead orgRead = new OrganizationRead();
 		params.put(OrganizationRead.PARAM_DOMAIN, adminDomain);
@@ -205,5 +205,53 @@ public class BulkUserAddController {
 			errorStr = errorStr.substring(0, errorStr.length() - 1);
 		}
 		return errorStr;
+	}
+
+	/**
+	 * 
+	 * @param user
+	 * @throws IOException
+	 */
+	private void execUserAdd(User user) throws IOException {
+		Map params = new HashMap();
+		params.put(UserAdd.PARAM_SESSION_ID, getSessionId());
+		UserAdd userAdd = new UserAdd();
+		params.put(UserAdd.PARAM_ORGANIZATION_ID, getOrganizationId() + "");
+		params.put(UserAdd.PARAM_USERNAME, user.getUsername());
+		params.put(UserAdd.PARAM_AUTH_USERNAME, user.getUsername());
+		params.put(UserAdd.PARAM_PASSWORD, user.getPassword());
+		params.put(UserAdd.PARAM_PASSWORD_CONFIRM, user.getPassword());
+		params.put(UserAdd.PARAM_EMAIL, user.getEmail());
+		params.put(UserAdd.PARAM_DOMAIN, this.adminDomain);
+		params.put(UserAdd.PARAM_NAME, user.getFullName());
+		UserAddResponse response = userAdd.sendRequest(params);
+		if (validateResponse(response)) {
+			user.setUserAdded(true);
+			user.setUserId(response.getUserId());
+		} else {
+			user.setUserAdded(false);
+			user.setError(constructErrorString(response.getErrors()));
+		}
+	}
+
+	/**
+	 * 
+	 * @param user
+	 */
+	void execUserAliasAdd(User user, UserAliasAdd userAliasAdd) throws IOException {
+		Map params = new HashMap();
+		params.put(UserAliasAdd.PARAM_SESSION_ID, getSessionId());
+		params.put(UserAliasAdd.PARAM_ORGANIZATION_ID, getOrganizationId() + "");
+		params.put(UserAliasAdd.PARAM_ALIAS_USERNAME, user.getExtension() + "");
+		params.put(UserAliasAdd.PARAM_ADDRESS_USERNAME, user.getAuthUsername());
+		UserAliasAddResponse response = userAliasAdd.sendRequest(params);
+		if (validateResponse(response)) {
+			logger.debug("Adding user alias: " + response.getExtension());
+			user.setExtension(Integer.parseInt(response.getExtension()));
+		} else {
+			logger.debug("Failed to retrieve user alias.");
+			user.setExtensionAdded(false);
+			user.setError(constructErrorString(response.getErrors()));
+		}
 	}
 }
