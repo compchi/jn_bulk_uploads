@@ -9,6 +9,7 @@ import com.jctn.bulkupload.model.json.AbstractJSONResponse;
 import com.jctn.bulkupload.model.json.OrganizationReadResponse;
 import com.jctn.bulkupload.model.json.SessionCreateResponse;
 import com.jctn.bulkupload.model.json.UserAddResponse;
+import com.jctn.bulkupload.model.json.UserAddressEditResponse;
 import com.jctn.bulkupload.model.json.UserAliasAddResponse;
 import com.jctn.bulkupload.model.json.VoicemailboxAddResponse;
 import com.jctn.bulkupload.service.ws.OrganizationRead;
@@ -24,6 +25,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 /**
@@ -105,6 +107,8 @@ public class BulkUserAddController {
 				uploadSingleUser(user);
 			} catch (Exception e) {
 				logger.error("Error uploading user: " + e.toString(), e);
+			} finally {
+				logUser(user);
 			}
 		}
 	}
@@ -112,18 +116,34 @@ public class BulkUserAddController {
 	private void uploadSingleUser(User user) throws IOException {
 
 		//add user--UserAdd
+		logger.info("Adding new user: " + user.getEmail());
+		logger.debug("Step 1: UserAdd");
 		execUserAdd(user);
-
+		if (!StringUtils.isEmpty(user.getError())) {
+			return;
+		}
 		//add extension--UserAliasAdd
+		logger.debug("Step 2: UserAliasAdd (extension)");
 		execUserAliasAdd(user, new UserAliasAdd());
+		if (!StringUtils.isEmpty(user.getError())) {
+			return;
+		}
 
 		//If the user doesn't want voice mail, we're done.
+		logger.debug("User does not want voicemail. All done.");
 		if (!user.isAddVoicemail()) {
 			return;
 		}
 		//add vm box--VoicemailoboxAdd
+		logger.debug("Step 3: VoicemailBoxAdd");
 		execVoicemailBoxAdd(user, new VoicemailboxAdd());
+		if (!StringUtils.isEmpty(user.getError())) {
+			return;
+		}
+
 		//link user to vm--UserAddressEdit.
+		logger.debug("Step 4: UserAddressEdit (link voicemail)");
+		execUserAddressEdit(user, new UserAddressEdit());
 	}
 
 	protected final String createSession(String adminUsername, String adminPassword, String adminDomain) {
@@ -287,5 +307,27 @@ public class BulkUserAddController {
 			user.setVmBoxAdded(false);
 			user.setError(constructErrorString(response.getErrors()));
 		}
+	}
+
+	void execUserAddressEdit(User user, UserAddressEdit userAddressEdit) throws IOException {
+		Map params = new HashMap();
+		params.put(UserAddressEdit.PARAM_SESSION_ID, getSessionId());
+		params.put(UserAddressEdit.PARAM_ADDRESS, user.getAuthUsername() + "@" + this.adminDomain);
+		params.put(UserAddressEdit.PARAM_DEFAULT_ADDRESS, user.getVmUsername() + "@" + this.adminDomain);
+		params.put(UserAddressEdit.PARAM_USERNAME, user.getAuthUsername());
+		params.put(UserAddressEdit.PARAM_USER_ID, user.getUserId() + "");
+		UserAddressEditResponse response = userAddressEdit.sendRequest(params);
+		if (validateResponse(response)) {
+			logger.debug("Mailbox successfully linked.");
+			user.setVmBoxLinked(true);
+		} else {
+			logger.debug("Failed to link voicemail box.");
+			user.setVmBoxLinked(false);
+			user.setError(constructErrorString(response.getErrors()));
+		}
+	}
+
+	private void logUser(User user) {
+		return;
 	}
 }

@@ -4,12 +4,14 @@
  */
 package com.jctn.bulkupload.controller;
 
+import com.jctn.bulkupload.model.json.UserAddressEditResponse;
 import com.jctn.bulkupload.model.json.UserAliasAddResponse;
 import com.jctn.bulkupload.service.ws.UserAliasAdd;
 import com.jctn.bulkupload.model.User;
 import com.jctn.bulkupload.model.json.VoicemailboxAddResponse;
 import com.jctn.bulkupload.service.ws.AbstractJunctionWSTest;
 import com.jctn.bulkupload.service.ws.HttpConnector;
+import com.jctn.bulkupload.service.ws.UserAddressEdit;
 import com.jctn.bulkupload.service.ws.VoicemailboxAdd;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -154,6 +156,41 @@ public class BulkUserAddControllerTest extends AbstractJunctionWSTest {
 
 		controller.execVoicemailBoxAdd(testUser, mockService);
 		verify(testUser).setVmBoxAdded(false);
+		verify(testUser, atLeastOnce()).setError(anyString());
+	}
+
+	public void testexecUserAddressEditGood() throws Exception {
+		System.out.println("execVoicemailBoxAddGood");
+		String goodResponseStr = loadTestResource("/useraddressedit_good_response.json");
+		HttpConnector connector = mock(HttpConnector.class);
+		when(connector.sendRequest(anyString(), anyMap())).thenReturn(goodResponseStr);
+
+		UserAddressEdit service = new UserAddressEdit();
+		UserAddressEditResponse response = service.mapJson(goodResponseStr);
+
+		UserAddressEdit mockService = mock(UserAddressEdit.class);
+		mockService.setHttpConnector(connector);
+		when(mockService.sendRequest(anyMap())).thenReturn(response);
+
+		controller.execUserAddressEdit(testUser, mockService);
+		verify(testUser).setVmBoxLinked(true);
+	}
+
+	public void testexecUserAddressEditError() throws Exception {
+		System.out.println("execVoicemailBoxAddError");
+		String badResponseStr = loadTestResource("/useraddressedit_error_response.json");
+		HttpConnector connector = mock(HttpConnector.class);
+		when(connector.sendRequest(anyString(), anyMap())).thenReturn(badResponseStr);
+
+		UserAddressEdit service = new UserAddressEdit();
+		UserAddressEditResponse response = service.mapJson(badResponseStr);
+
+		UserAddressEdit mockService = mock(UserAddressEdit.class);
+		mockService.setHttpConnector(connector);
+		when(mockService.sendRequest(anyMap())).thenReturn(response);
+
+		controller.execUserAddressEdit(testUser, mockService);
+		verify(testUser).setVmBoxLinked(false);
 		verify(testUser, atLeastOnce()).setError(anyString());
 	}
 }
