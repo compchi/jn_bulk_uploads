@@ -4,6 +4,7 @@
  */
 package com.jctn.bulkupload.controller;
 
+import java.io.File;
 import com.jctn.bulkupload.model.json.UserAddressEditResponse;
 import com.jctn.bulkupload.model.json.UserAliasAddResponse;
 import com.jctn.bulkupload.service.ws.UserAliasAdd;
@@ -13,6 +14,9 @@ import com.jctn.bulkupload.service.ws.AbstractJunctionWSTest;
 import com.jctn.bulkupload.service.ws.HttpConnector;
 import com.jctn.bulkupload.service.ws.UserAddressEdit;
 import com.jctn.bulkupload.service.ws.VoicemailboxAdd;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import org.apache.commons.lang.StringUtils;
@@ -62,15 +66,28 @@ public class BulkUserAddControllerTest extends AbstractJunctionWSTest {
 	/**
 	 * Test of parseCsv method, of class BulkUserAddController.
 	 */
-	public void testParseCsv() {
-//		System.out.println("parseCsv");
-//		File csvFile = null;
-//		BulkUserAddController instance = null;
-//		Collection expResult = null;
-//		Collection result = instance.parseCsv(csvFile);
-//		assertEquals(expResult, result);
-//		// TODO review the generated test code and remove the default call to fail.
-//		fail("The test case is a prototype.");
+	public void testParseCsvGood() throws URISyntaxException, FileNotFoundException, IOException {
+		System.out.println("parseCsvGood");
+		File csvFile = new File(this.getClass().getResource("/goodline.csv").toURI());
+
+		Collection<User> result = controller.parseCsv(csvFile);
+		assertNotNull(result);
+		assertEquals(1, result.size());
+		User user = result.iterator().next();
+		assertEquals("Test", user.getFirstName());
+		assertEquals("User", user.getLastName());
+		assertEquals(new Integer(1234), user.getExtension());
+		assertEquals("test_user@domain.com", user.getEmail());
+		assertEquals(false, user.isAddVoicemail());
+	}
+
+	public void testParseCsvBad() throws URISyntaxException, FileNotFoundException, IOException {
+		System.out.println("parseCsvBad");
+		File csvFile = new File(this.getClass().getResource("/badline.csv").toURI());
+
+		Collection<User> result = controller.parseCsv(csvFile);
+		assertNotNull(result);
+		assertEquals(0, result.size());
 	}
 
 	/**

@@ -18,14 +18,19 @@ import com.jctn.bulkupload.service.ws.UserAdd;
 import com.jctn.bulkupload.service.ws.UserAddressEdit;
 import com.jctn.bulkupload.service.ws.UserAliasAdd;
 import com.jctn.bulkupload.service.ws.VoicemailboxAdd;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.text.StrTokenizer;
 import org.apache.log4j.Logger;
 
 /**
@@ -92,8 +97,57 @@ public class BulkUserAddController {
 	 * @param csvFile
 	 * @return
 	 */
-	public Collection<User> parseCsv(File csvFile) {
-		return new ArrayList<User>(0);
+	public Collection<User> parseCsv(File csvFile) throws FileNotFoundException, IOException {
+		BufferedReader reader = new BufferedReader(
+				new InputStreamReader(
+				new FileInputStream(csvFile)));
+		String line = null;
+		StrTokenizer tokenizer = StrTokenizer.getCSVInstance();
+		tokenizer.setIgnoreEmptyTokens(false);
+		Collection<User> results = new ArrayList<User>(20);
+		while ((line = reader.readLine()) != null) {
+			tokenizer.reset(line);
+			try {
+				String[] tokens = tokenizer.getTokenArray();
+				if (tokens.length != 5) {
+					logger.error("Unprocessable line (does not have 5 values): " + line);
+					continue;
+				}
+				results.add(constructUserFromLineParts(tokens));
+			} catch (Exception e) {
+				logger.error("Parsing failed for line: " + line, e);
+			}
+		}
+		reader.close();
+		return results;
+	}
+
+	/**
+	 * Builds a user object from the given array.
+	 * @param tokens
+	 * @return
+	 */
+	private User constructUserFromLineParts(String[] tokens) {
+		User user = new User();
+		user.setFirstName(tokens[0]);
+		user.setLastName(tokens[1]);
+		if (StringUtils.isEmpty(user.getFirstName()) && StringUtils.isEmpty(user.getLastName())) {
+			throw new IllegalArgumentException("Neither first name nor last name are available.");
+		}
+
+		try {
+			user.setExtension(new Integer(tokens[2]));
+		} catch (NumberFormatException nfe) {
+			throw new IllegalArgumentException("Extension must be a valid integer: " + tokens[2]);
+		}
+
+		if (!tokens[3].matches(".+@.+\\.[a-z]+")) {
+			throw new IllegalArgumentException("Email address is invalid: " + tokens[3]);
+		}
+
+		user.setEmail(tokens[3]);
+		user.setAddVoicemail("y".equalsIgnoreCase(tokens[4]));
+		return user;
 	}
 
 	/**
