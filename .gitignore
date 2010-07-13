@@ -3,3 +3,4 @@ build/
 dist/
 target/
 nb-configuration.xml
+nbactions.xml
