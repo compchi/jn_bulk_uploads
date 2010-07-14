@@ -11,6 +11,7 @@
 package com.jctn.bulkupload;
 
 import com.jctn.bulkupload.controller.BulkUploaderController;
+import java.io.File;
 import javax.swing.JFileChooser;
 
 /**
@@ -20,6 +21,7 @@ import javax.swing.JFileChooser;
 public class BulkUploader extends javax.swing.JFrame {
 
 	private BulkUploaderController guiController;
+	private File csvFile;
 
 	/** Creates new form BulkUploader */
 	public BulkUploader() {
@@ -135,6 +137,11 @@ public class BulkUploader extends javax.swing.JFrame {
 
             uploadButton.setText(resourceMap.getString("uploadButton.text")); // NOI18N
             uploadButton.setName("uploadButton"); // NOI18N
+            uploadButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    uploadButtonActionPerformed(evt);
+                }
+            });
             gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 2;
             gridBagConstraints.gridy = 3;
@@ -265,10 +272,17 @@ public class BulkUploader extends javax.swing.JFrame {
 				@Override
 				public void run() {
 					textFieldCsvFilePath.setText(csvFileChooser.getSelectedFile().getAbsolutePath());
+					setCsvFile(csvFileChooser.getSelectedFile());
 				}
 			});
 		}
 	}//GEN-LAST:event_csvFileChooserActionPerformed
+
+	private void uploadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadButtonActionPerformed
+		//validate input
+		//start the magic
+		guiController.startUpload(textFieldUsername.getText(), passwordField.getPassword(), textFieldDomain.getText(), csvFile);
+	}//GEN-LAST:event_uploadButtonActionPerformed
 
 	/**
 	 * @param args the command line arguments
@@ -308,4 +322,8 @@ public class BulkUploader extends javax.swing.JFrame {
     private javax.swing.JTextField textFieldUsername;
     private javax.swing.JButton uploadButton;
     // End of variables declaration//GEN-END:variables
+
+	public void setCsvFile(File csvFile) {
+		this.csvFile = csvFile;
+	}
 }

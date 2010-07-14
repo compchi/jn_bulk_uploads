@@ -72,4 +72,9 @@ public class BulkUploaderController {
 			}
 		});
 	}
+
+	public void startUpload(String text, char[] password, String domain, File csvFile) {
+		//parse the file
+		//submit the parsed lines for processing
+	}
 }
