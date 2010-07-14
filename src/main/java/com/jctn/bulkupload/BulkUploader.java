@@ -11,6 +11,7 @@
 package com.jctn.bulkupload;
 
 import com.jctn.bulkupload.controller.BulkUploaderController;
+import javax.swing.JFileChooser;
 
 /**
  *
@@ -257,14 +258,16 @@ public class BulkUploader extends javax.swing.JFrame {
 	}//GEN-LAST:event_chooseFileButtonActionPerformed
 
 	private void csvFileChooserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_csvFileChooserActionPerformed
-		//Populate the text field with the path of the choosen file.
-		guiController.runInSwingThread(new Runnable() {
+		if (evt.getActionCommand().equals(JFileChooser.APPROVE_SELECTION)) {
+			//Populate the text field with the path of the choosen file.
+			guiController.runInSwingThread(new Runnable() {
 
-			@Override
-			public void run() {
-				textFieldCsvFilePath.setText(csvFileChooser.getSelectedFile().getAbsolutePath());
-			}
-		});
+				@Override
+				public void run() {
+					textFieldCsvFilePath.setText(csvFileChooser.getSelectedFile().getAbsolutePath());
+				}
+			});
+		}
 	}//GEN-LAST:event_csvFileChooserActionPerformed
 
 	/**

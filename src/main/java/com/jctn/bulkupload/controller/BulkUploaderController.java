@@ -8,6 +8,7 @@ import java.awt.Component;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileSystemView;
 
 /**
@@ -46,8 +47,25 @@ public class BulkUploaderController {
 				if (roots != null && roots.length > 0) {
 					currentDir = roots[0];
 				}
-				
+
 				fileChooser.setCurrentDirectory(currentDir);
+				if (fileChooser.getChoosableFileFilters() != null && fileChooser.getChoosableFileFilters().length > 0) {
+					fileChooser.resetChoosableFileFilters();
+				}
+
+				fileChooser.setFileFilter(new FileFilter() {
+
+					@Override
+					public boolean accept(File f) {
+						return f.getPath().toLowerCase().endsWith(".csv");
+					}
+
+					@Override
+					public String getDescription() {
+						return "Comma-separated values (csv) files.";
+					}
+				});
+
 				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 				fileChooser.setDialogTitle("Choose CSV file for upload.");
 				fileChooser.showOpenDialog(parent);
