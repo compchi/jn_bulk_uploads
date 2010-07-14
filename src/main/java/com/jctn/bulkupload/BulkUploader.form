@@ -2,6 +2,18 @@
 
 <Form version="1.5" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
+    <Component class="javax.swing.JFileChooser" name="csvFileChooser">
+      <Properties>
+        <Property name="currentDirectory" type="java.io.File" editor="org.netbeans.beaninfo.editors.FileEditor">
+          <SerializedValue value="-84,-19,0,5,115,114,0,12,106,97,118,97,46,105,111,46,70,105,108,101,4,45,-92,69,14,13,-28,-1,3,0,1,76,0,4,112,97,116,104,116,0,18,76,106,97,118,97,47,108,97,110,103,47,83,116,114,105,110,103,59,120,112,116,0,3,67,58,92,119,2,0,92,120"/>
+        </Property>
+        <Property name="dialogTitle" type="java.lang.String" resourceKey="csvFileChooser.dialogTitle"/>
+        <Property name="name" type="java.lang.String" value="csvFileChooser" noResource="true"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="csvFileChooserActionPerformed"/>
+      </Events>
+    </Component>
     <Menu class="javax.swing.JMenuBar" name="menuBar">
       <Properties>
         <Property name="name" type="java.lang.String" value="menuBar" noResource="true"/>
@@ -118,6 +130,7 @@
     <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,1,44,0,0,1,-112"/>
   </AuxValues>
 
   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
@@ -133,10 +146,10 @@
         </Constraint>
       </Constraints>
     </Component>
-    <Component class="javax.swing.JTextField" name="jTextField1">
+    <Component class="javax.swing.JTextField" name="textFieldUsername">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="jTextField1.text"/>
-        <Property name="name" type="java.lang.String" value="jTextField1" noResource="true"/>
+        <Property name="text" type="java.lang.String" resourceKey="textFieldUsername.text"/>
+        <Property name="name" type="java.lang.String" value="textFieldUsername" noResource="true"/>
         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[100, 20]"/>
         </Property>
@@ -169,10 +182,10 @@
         </Constraint>
       </Constraints>
     </Component>
-    <Component class="javax.swing.JTextField" name="jTextField3">
+    <Component class="javax.swing.JTextField" name="textFieldDomain">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="jTextField3.text"/>
-        <Property name="name" type="java.lang.String" value="jTextField3" noResource="true"/>
+        <Property name="text" type="java.lang.String" resourceKey="textFieldDomain.text"/>
+        <Property name="name" type="java.lang.String" value="textFieldDomain" noResource="true"/>
         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[100, 20]"/>
         </Property>
@@ -183,21 +196,21 @@
         </Constraint>
       </Constraints>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton1">
+    <Component class="javax.swing.JButton" name="uploadButton">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="jButton1.text"/>
-        <Property name="name" type="java.lang.String" value="jButton1" noResource="true"/>
+        <Property name="text" type="java.lang.String" resourceKey="uploadButton.text"/>
+        <Property name="name" type="java.lang.String" value="uploadButton" noResource="true"/>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-          <GridBagConstraints gridX="0" gridY="4" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.0"/>
+          <GridBagConstraints gridX="2" gridY="3" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="20" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.0"/>
         </Constraint>
       </Constraints>
     </Component>
-    <Component class="javax.swing.JPasswordField" name="jPasswordField1">
+    <Component class="javax.swing.JPasswordField" name="passwordField">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="jPasswordField1.text"/>
-        <Property name="name" type="java.lang.String" value="jPasswordField1" noResource="true"/>
+        <Property name="text" type="java.lang.String" resourceKey="passwordField.text"/>
+        <Property name="name" type="java.lang.String" value="passwordField" noResource="true"/>
         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[100, 20]"/>
         </Property>
@@ -208,28 +221,31 @@
         </Constraint>
       </Constraints>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton2">
+    <Component class="javax.swing.JButton" name="chooseFileButton">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="jButton2.text"/>
-        <Property name="name" type="java.lang.String" value="jButton2" noResource="true"/>
+        <Property name="text" type="java.lang.String" resourceKey="chooseFileButton.text"/>
+        <Property name="name" type="java.lang.String" value="chooseFileButton" noResource="true"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chooseFileButtonActionPerformed"/>
+      </Events>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-          <GridBagConstraints gridX="0" gridY="3" gridWidth="1" gridHeight="1" fill="0" ipadX="2" ipadY="1" insetsTop="4" insetsLeft="9" insetsBottom="1" insetsRight="5" anchor="13" weightX="0.0" weightY="0.0"/>
+          <GridBagConstraints gridX="0" gridY="3" gridWidth="1" gridHeight="1" fill="0" ipadX="2" ipadY="1" insetsTop="20" insetsLeft="9" insetsBottom="1" insetsRight="5" anchor="13" weightX="0.0" weightY="0.0"/>
         </Constraint>
       </Constraints>
     </Component>
-    <Component class="javax.swing.JTextField" name="jTextField2">
+    <Component class="javax.swing.JTextField" name="textFieldCsvFilePath">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="jTextField2.text"/>
-        <Property name="name" type="java.lang.String" value="jTextField2" noResource="true"/>
+        <Property name="text" type="java.lang.String" resourceKey="textFieldCsvFilePath.text"/>
+        <Property name="name" type="java.lang.String" value="textFieldCsvFilePath" noResource="true"/>
         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="[100, 20]"/>
+          <Dimension value="[125, 20]"/>
         </Property>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-          <GridBagConstraints gridX="1" gridY="3" gridWidth="1" gridHeight="1" fill="0" ipadX="2" ipadY="1" insetsTop="4" insetsLeft="0" insetsBottom="1" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
+          <GridBagConstraints gridX="1" gridY="3" gridWidth="1" gridHeight="1" fill="0" ipadX="2" ipadY="1" insetsTop="20" insetsLeft="0" insetsBottom="1" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
         </Constraint>
       </Constraints>
     </Component>
