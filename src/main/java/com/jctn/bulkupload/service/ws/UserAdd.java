@@ -26,6 +26,45 @@ public class UserAdd extends AbstractWebservice<UserAddResponse> {
 		super.action = "UserAdd";
 	}
 
+	/**
+	 * Creates an auth username per the algo described in the technical specs.
+	 * @param emailAddress
+	 * @param onsipDomain
+	 * @return
+	 */
+	public String createAuthUsername(String emailAddress, String onsipDomain) {
+		//1. get onsip username
+		String onsipDomainUsernamePart = onsipDomain.split("\\.")[0];
+		//2. get email username
+		String emailUsername = emailAddress.split("@")[0];
+		//3. join 1) and 2) with underscore
+		String authUsername = onsipDomainUsernamePart + "_" + emailUsername;
+		//4.
+		if (authUsername.length() >= 32 || !authUsername.matches("^[a-z]([a-z0-9_])*[a-z0-9]$")) {
+			//5.
+			authUsername = createUsername(emailUsername);
+		}
+
+		return authUsername;
+	}
+
+	/**
+	 * Creates a username based on the algorithm described in the tech spec.
+	 * @param emailUsername
+	 * @return
+	 */
+	private String createUsername(String emailUsername) {
+		emailUsername = emailUsername.trim();
+		emailUsername = emailUsername.replaceAll("[^a-z0-9_\\-\\.]+", "_");
+		String legalExpression = "^[a-z][_a-z0-9\\-]*(\\.[_a-z0-9\\-]+)*$";
+
+		if (!emailUsername.matches(legalExpression) || emailUsername.length() >= 32) {
+			emailUsername = "user";
+		}
+
+		return emailUsername;
+	}
+
 	@Override
 	public UserAddResponse mapJson(String jsonString) {
 		UserAddResponse userAddResponse = new UserAddResponse();

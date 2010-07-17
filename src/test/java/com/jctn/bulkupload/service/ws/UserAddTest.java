@@ -62,4 +62,42 @@ public class UserAddTest extends AbstractJunctionWSTest {
 		assertEquals(new Long(12345), result.getUserId());
 		assertEquals("testuser0", result.getUsername());
 	}
+
+	public void testCreateAuthUsername() throws Exception {
+		UserAdd instance = new UserAdd();
+		//period and hyphen in email address
+		String email = "martin.constantine-@mccc.com";
+		String domain = "short.onsip.com";
+		String result = instance.createAuthUsername(email, domain);
+		String expected = "martin.constantine-";
+		assertEquals(expected, result);
+
+		//too long
+		email = "martin.constantine@mccc.com";
+		domain = "moccomputerconsulting.onsip.com";
+		result = instance.createAuthUsername(email, domain);
+		expected = "martin.constantine";
+		assertEquals(expected, result);
+
+		//Illegal chars in email username
+		email = "martin)const*antine@mccc.com";
+		domain = "moccomputerconsulting.onsip.com";
+		result = instance.createAuthUsername(email, domain);
+		expected = "martin_const_antine";
+		assertEquals(expected, result);
+
+		//Normal case
+		email = "martin@mccc.com";
+		domain = "short.onsip.com";
+		result = instance.createAuthUsername(email, domain);
+		expected = "short_martin";
+		assertEquals(expected, result);
+
+		//Unsalvagable
+		email = "martin)constantine_of*mccomputerconsulting@mccc.com";
+		domain = "moccomputerconsulting.onsip.com";
+		result = instance.createAuthUsername(email, domain);
+		expected = "user";
+		assertEquals(expected, result);
+	}
 }
