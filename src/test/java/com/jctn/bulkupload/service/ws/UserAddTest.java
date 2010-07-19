@@ -111,7 +111,26 @@ public class UserAddTest extends AbstractJunctionWSTest {
 		assertTrue(result.length() >= 8);
 	}
 
-	public void createUsername() throws Exception{
+	public void testCreateUsername() throws Exception{
+		UserAdd instance = new UserAdd();
+		String emailUsername = "martin";
+		String result = instance.createUsername(emailUsername);
+		String expected = "martin";
+		assertEquals(expected, result);
 
+		emailUsername = "-martin.constan-tine-";
+		result = instance.createUsername(emailUsername);
+		expected = "martin.constan-tine";
+		assertEquals(expected, result);
+
+		emailUsername = "martin.constantine";
+		result = instance.createUsername(emailUsername);
+		expected = "martin.constantine";
+		assertEquals(expected, result);
+
+		emailUsername = "martin.constantine-super.long.long.long.long.name";
+		result = instance.createUsername(emailUsername);
+		expected = "user";
+		assertEquals(expected, result);
 	}
 }

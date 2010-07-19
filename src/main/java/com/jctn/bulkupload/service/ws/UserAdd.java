@@ -43,10 +43,10 @@ public class UserAdd extends AbstractWebservice<UserAddResponse> {
 	public String createAuthUsername(String emailAddress, String onsipDomain) {
 		//1. get onsip username
 		String domainUsername = onsipDomain.split("\\.")[0];
-		domainUsername = replaceNonalphaNumeric(domainUsername);
+		domainUsername = replaceUnwanted(domainUsername, "[^a-z0-9_]", "_");
 		//2. get email username
 		String emailUsername = emailAddress.split("@")[0];
-		emailUsername = replaceNonalphaNumeric(emailUsername);
+		emailUsername = replaceUnwanted(emailUsername, "[^a-z0-9_]", "_");
 		//3. join 1) and 2) with underscore
 		String authUsername = domainUsername + "_" + emailUsername;
 		//4.
@@ -64,10 +64,10 @@ public class UserAdd extends AbstractWebservice<UserAddResponse> {
 	 * @param input
 	 * @return
 	 */
-	private String replaceNonalphaNumeric(String input) {
-		input = input.replaceAll("[^a-z0-9_]", "_");
-		input = input.startsWith("_") ? StringUtils.stripStart(input, "_") : input;
-		input = input.endsWith("_") ? StringUtils.stripEnd(input, "_") : input;
+	private String replaceUnwanted(String input, String charsToReplaceRegex, String replacementStr) {
+		input = input.replaceAll(charsToReplaceRegex, replacementStr);
+		input = input.startsWith(replacementStr) ? StringUtils.stripStart(input, replacementStr) : input;
+		input = input.endsWith(replacementStr) ? StringUtils.stripEnd(input, replacementStr) : input;
 		return input;
 	}
 
@@ -78,7 +78,12 @@ public class UserAdd extends AbstractWebservice<UserAddResponse> {
 	 */
 	public String createUsername(String emailUsername) {
 		emailUsername = emailUsername.trim();
-		emailUsername = emailUsername.replaceAll("[^a-z0-9_\\-\\.]+", "_");
+		//emailUsername = replaceUnwanted(emailUsername, "[^a-z0-9_\\-\\.]", "_");
+		emailUsername = StringUtils.removeStart(emailUsername, "-");
+		emailUsername = StringUtils.removeEnd(emailUsername, "-");
+		emailUsername = StringUtils.removeStart(emailUsername, ".");
+		emailUsername = StringUtils.removeEnd(emailUsername, ".");
+
 		String legalExpression = "^[a-z][_a-z0-9-]*(\\.[_a-z0-9-]+)*$";
 
 		if (!emailUsername.matches(legalExpression) || emailUsername.length() >= 32) {
