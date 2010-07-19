@@ -5,6 +5,8 @@
 package com.jctn.bulkupload.service.ws;
 
 import com.jctn.bulkupload.model.json.UserAddResponse;
+import com.jctn.bulkupload.util.PronouncableRandomString;
+import org.apache.commons.lang.StringUtils;
 import org.json.simple.JSONObject;
 
 /**
@@ -21,9 +23,15 @@ public class UserAdd extends AbstractWebservice<UserAddResponse> {
 	public static final String PARAM_AUTH_USERNAME = "AuthUsername";
 	public static final String PARAM_PASSWORD = "Password";
 	public static final String PARAM_PASSWORD_CONFIRM = "PasswordConfirm";
+	private PronouncableRandomString randUsernameGenerator;
 
 	public UserAdd() {
 		super.action = "UserAdd";
+		this.randUsernameGenerator = new PronouncableRandomString();
+	}
+
+	public void setRandUsernameGenerator(PronouncableRandomString randUsernameGenerator) {
+		this.randUsernameGenerator = randUsernameGenerator;
 	}
 
 	/**
@@ -34,18 +42,33 @@ public class UserAdd extends AbstractWebservice<UserAddResponse> {
 	 */
 	public String createAuthUsername(String emailAddress, String onsipDomain) {
 		//1. get onsip username
-		String onsipDomainUsernamePart = onsipDomain.split("\\.")[0];
+		String domainUsername = onsipDomain.split("\\.")[0];
+		domainUsername = replaceNonalphaNumeric(domainUsername);
 		//2. get email username
 		String emailUsername = emailAddress.split("@")[0];
+		emailUsername = replaceNonalphaNumeric(emailUsername);
 		//3. join 1) and 2) with underscore
-		String authUsername = onsipDomainUsernamePart + "_" + emailUsername;
+		String authUsername = domainUsername + "_" + emailUsername;
 		//4.
 		if (authUsername.length() >= 32 || !authUsername.matches("^[a-z]([a-z0-9_])*[a-z0-9]$")) {
 			//5.
-			authUsername = createUsername(emailUsername);
+			authUsername = this.randUsernameGenerator.getRandomPronouncableString();
 		}
 
 		return authUsername;
+	}
+
+	/**
+	 * Replaces all non alphanumeric lowercase chars with an underscore. If the resulting string ends up starting
+	 * or ending with an underscore, then those are stripped respectively.
+	 * @param input
+	 * @return
+	 */
+	private String replaceNonalphaNumeric(String input) {
+		input = input.replaceAll("[^a-z0-9_]", "_");
+		input = input.startsWith("_") ? StringUtils.stripStart(input, "_") : input;
+		input = input.endsWith("_") ? StringUtils.stripEnd(input, "_") : input;
+		return input;
 	}
 
 	/**
@@ -53,10 +76,10 @@ public class UserAdd extends AbstractWebservice<UserAddResponse> {
 	 * @param emailUsername
 	 * @return
 	 */
-	private String createUsername(String emailUsername) {
+	public String createUsername(String emailUsername) {
 		emailUsername = emailUsername.trim();
 		emailUsername = emailUsername.replaceAll("[^a-z0-9_\\-\\.]+", "_");
-		String legalExpression = "^[a-z][_a-z0-9\\-]*(\\.[_a-z0-9\\-]+)*$";
+		String legalExpression = "^[a-z][_a-z0-9-]*(\\.[_a-z0-9-]+)*$";
 
 		if (!emailUsername.matches(legalExpression) || emailUsername.length() >= 32) {
 			emailUsername = "user";

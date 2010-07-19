@@ -5,10 +5,13 @@
 package com.jctn.bulkupload.service.ws;
 
 import com.jctn.bulkupload.model.json.UserAddResponse;
+import com.jctn.bulkupload.util.PronouncableRandomString;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Map;
 import org.json.simple.JSONObject;
+import static org.mockito.Mockito.*;
+
 
 /**
  *
@@ -69,22 +72,28 @@ public class UserAddTest extends AbstractJunctionWSTest {
 		String email = "martin.constantine-@mccc.com";
 		String domain = "short.onsip.com";
 		String result = instance.createAuthUsername(email, domain);
-		String expected = "martin.constantine-";
+		String expected = "short_martin_constantine";
 		assertEquals(expected, result);
 
-		//too long
+		//too long (expect random username)
 		email = "martin.constantine@mccc.com";
 		domain = "moccomputerconsulting.onsip.com";
+		PronouncableRandomString mockRandStr = mock(PronouncableRandomString.class);
+		PronouncableRandomString realRandStr = new PronouncableRandomString();
+		when(mockRandStr.getRandomPronouncableString()).thenReturn(realRandStr.getRandomPronouncableString());
+		instance.setRandUsernameGenerator(mockRandStr);
 		result = instance.createAuthUsername(email, domain);
-		expected = "martin.constantine";
-		assertEquals(expected, result);
-
-		//Illegal chars in email username
+		verify(mockRandStr).getRandomPronouncableString();
+		assertNotNull(result);
+		assertTrue(result.length() >= 8);
+		
+		//Illegal chars in email username + too long
 		email = "martin)const*antine@mccc.com";
 		domain = "moccomputerconsulting.onsip.com";
 		result = instance.createAuthUsername(email, domain);
-		expected = "martin_const_antine";
-		assertEquals(expected, result);
+		verify(mockRandStr, times(2)).getRandomPronouncableString();
+		assertNotNull(result);
+		assertTrue(result.length() >= 8);
 
 		//Normal case
 		email = "martin@mccc.com";
@@ -97,7 +106,12 @@ public class UserAddTest extends AbstractJunctionWSTest {
 		email = "martin)constantine_of*mccomputerconsulting@mccc.com";
 		domain = "moccomputerconsulting.onsip.com";
 		result = instance.createAuthUsername(email, domain);
-		expected = "user";
-		assertEquals(expected, result);
+		verify(mockRandStr, times(3)).getRandomPronouncableString();
+		assertNotNull(result);
+		assertTrue(result.length() >= 8);
+	}
+
+	public void createUsername() throws Exception{
+
 	}
 }
