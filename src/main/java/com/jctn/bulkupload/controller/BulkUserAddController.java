@@ -172,7 +172,24 @@ public class BulkUserAddController {
 		//add user--UserAdd
 		logger.info("Adding new user: " + user.getEmail());
 		logger.debug("Step 1: UserAdd");
-		execUserAdd(user);
+		boolean usenamesGood = false;
+		int suffix = 1;
+		while (!usenamesGood) {
+			execUserAdd(user);
+			if (StringUtils.isEmpty(user.getError())) {
+				break;
+			}
+
+			//@TODO: see what kind of error message is retuned for existing username and auth_username
+			//and leverage here
+			if (user.getError().contains("username") || user.getError().contains("auth_username")) {
+				user.setAuthUsername(user.getAuthUsername() + suffix++);
+				user.setUsername(user.getUsername() + suffix++);
+			} else {
+				usenamesGood = true;
+			}
+		}
+
 		if (!StringUtils.isEmpty(user.getError())) {
 			return;
 		}
@@ -296,9 +313,13 @@ public class BulkUserAddController {
 		Map params = new HashMap();
 		params.put(UserAdd.PARAM_SESSION_ID, getSessionId());
 		UserAdd userAdd = new UserAdd();
+		//Username and authusername
+		user.setAuthUsername(userAdd.createAuthUsername(user.getEmail(), adminDomain));
+		user.setUsername(userAdd.createUsername(user.getEmail().split("@")[0]));
+
 		params.put(UserAdd.PARAM_ORGANIZATION_ID, getOrganizationId() + "");
 		params.put(UserAdd.PARAM_USERNAME, user.getUsername());
-		params.put(UserAdd.PARAM_AUTH_USERNAME, user.getUsername());
+		params.put(UserAdd.PARAM_AUTH_USERNAME, user.getAuthUsername());
 		params.put(UserAdd.PARAM_PASSWORD, user.getPassword());
 		params.put(UserAdd.PARAM_PASSWORD_CONFIRM, user.getPassword());
 		params.put(UserAdd.PARAM_EMAIL, user.getEmail());

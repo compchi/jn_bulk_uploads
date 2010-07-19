@@ -27,6 +27,8 @@ public class User {
 	private Integer vmPassword;
 	private boolean vmBoxAdded;
 	private boolean vmBoxLinked;
+	private String username;
+	private String authUsername;
 
 	public String getError() {
 		return error;
@@ -90,11 +92,19 @@ public class User {
 	}
 
 	public String getUsername() {
-		return StringUtils.lowerCase(firstName + "_" + lastName);
+		return username;
 	}
 
 	public String getAuthUsername() {
-		return getUsername();
+		return authUsername;
+	}
+
+	public void setAuthUsername(String authUsername) {
+		this.authUsername = authUsername;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getPassword() {
