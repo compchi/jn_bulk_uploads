@@ -93,19 +93,19 @@ public class BulkUploaderController {
 		errors.clear();
 		try {
 			if (StringUtils.isEmpty(adminUsername)) {
-				errors.add("username is blank.");
+				errors.add("Username is blank.");
 			}
 
 			if (StringUtils.isEmpty(adminDomain)) {
-				errors.add("domain is blank.");
+				errors.add("Domain is blank.");
 			}
 
 			if (password == null || password.length == 0 || StringUtils.isEmpty(new String(password))) {
-				errors.add("password is blank");
+				errors.add("Password is blank.");
 			}
 
 			if (csvFile == null || !csvFile.canRead()) {
-				errors.add("csv file not readable");
+				errors.add("CSV file not readable.");
 			}
 		} catch (Exception e) {
 			errors.add("Unknown error: " + e.toString());

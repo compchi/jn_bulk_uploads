@@ -15,6 +15,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -43,15 +47,17 @@ public class BulkUploader extends javax.swing.JFrame {
         java.awt.GridBagConstraints gridBagConstraints;
 
         csvFileChooser = new javax.swing.JFileChooser();
+        uploadButton = new javax.swing.JButton();
+        panelChooseFile = new javax.swing.JPanel();
+        chooseFileButton = new javax.swing.JButton();
+        labelCsvFilePath = new javax.swing.JLabel();
+        panelAuthCredentials = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         textFieldUsername = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         textFieldDomain = new javax.swing.JTextField();
-        uploadButton = new javax.swing.JButton();
         passwordField = new javax.swing.JPasswordField();
-        chooseFileButton = new javax.swing.JButton();
-        textFieldCsvFilePath = new javax.swing.JTextField();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openMenuItem = new javax.swing.JMenuItem();
@@ -78,9 +84,55 @@ public class BulkUploader extends javax.swing.JFrame {
             });
 
             setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-            setMinimumSize(new java.awt.Dimension(300, 150));
+            setTitle(resourceMap.getString("Form.title")); // NOI18N
+            setMinimumSize(new java.awt.Dimension(500, 300));
             setName("Form"); // NOI18N
             getContentPane().setLayout(new java.awt.GridBagLayout());
+
+            uploadButton.setText(resourceMap.getString("uploadButton.text")); // NOI18N
+            uploadButton.setName("uploadButton"); // NOI18N
+            uploadButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    uploadButtonActionPerformed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.gridy = 2;
+            gridBagConstraints.insets = new java.awt.Insets(25, 2, 18, 0);
+            getContentPane().add(uploadButton, gridBagConstraints);
+
+            panelChooseFile.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+            panelChooseFile.setMinimumSize(new java.awt.Dimension(465, 37));
+            panelChooseFile.setName("panelChooseFile"); // NOI18N
+            panelChooseFile.setPreferredSize(new java.awt.Dimension(465, 40));
+            panelChooseFile.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+
+            chooseFileButton.setText(resourceMap.getString("chooseFileButton.text")); // NOI18N
+            chooseFileButton.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+            chooseFileButton.setName("chooseFileButton"); // NOI18N
+            chooseFileButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    chooseFileButtonActionPerformed(evt);
+                }
+            });
+            panelChooseFile.add(chooseFileButton);
+
+            labelCsvFilePath.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+            labelCsvFilePath.setText(resourceMap.getString("labelCsvFilePath.text")); // NOI18N
+            labelCsvFilePath.setMaximumSize(new java.awt.Dimension(400, 14));
+            labelCsvFilePath.setName("labelCsvFilePath"); // NOI18N
+            labelCsvFilePath.setPreferredSize(new java.awt.Dimension(300, 14));
+            panelChooseFile.add(labelCsvFilePath);
+
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.gridy = 1;
+            gridBagConstraints.insets = new java.awt.Insets(4, 0, 0, 0);
+            getContentPane().add(panelChooseFile, gridBagConstraints);
+
+            panelAuthCredentials.setName("panelAuthCredentials"); // NOI18N
+            panelAuthCredentials.setLayout(new java.awt.GridBagLayout());
 
             jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
             jLabel1.setName("jLabel1"); // NOI18N
@@ -89,9 +141,10 @@ public class BulkUploader extends javax.swing.JFrame {
             gridBagConstraints.ipady = 1;
             gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
             gridBagConstraints.insets = new java.awt.Insets(4, 0, 1, 5);
-            getContentPane().add(jLabel1, gridBagConstraints);
+            panelAuthCredentials.add(jLabel1, gridBagConstraints);
 
             textFieldUsername.setText(resourceMap.getString("textFieldUsername.text")); // NOI18N
+            textFieldUsername.setMinimumSize(new java.awt.Dimension(100, 20));
             textFieldUsername.setName("textFieldUsername"); // NOI18N
             textFieldUsername.setPreferredSize(new java.awt.Dimension(100, 20));
             gridBagConstraints = new java.awt.GridBagConstraints();
@@ -101,7 +154,7 @@ public class BulkUploader extends javax.swing.JFrame {
             gridBagConstraints.ipady = 1;
             gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
             gridBagConstraints.insets = new java.awt.Insets(4, 0, 1, 5);
-            getContentPane().add(textFieldUsername, gridBagConstraints);
+            panelAuthCredentials.add(textFieldUsername, gridBagConstraints);
 
             jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
             jLabel2.setName("jLabel2"); // NOI18N
@@ -112,7 +165,7 @@ public class BulkUploader extends javax.swing.JFrame {
             gridBagConstraints.ipady = 1;
             gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
             gridBagConstraints.insets = new java.awt.Insets(4, 0, 1, 5);
-            getContentPane().add(jLabel2, gridBagConstraints);
+            panelAuthCredentials.add(jLabel2, gridBagConstraints);
 
             jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
             jLabel3.setName("jLabel3"); // NOI18N
@@ -123,9 +176,10 @@ public class BulkUploader extends javax.swing.JFrame {
             gridBagConstraints.ipady = 1;
             gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
             gridBagConstraints.insets = new java.awt.Insets(4, 0, 1, 5);
-            getContentPane().add(jLabel3, gridBagConstraints);
+            panelAuthCredentials.add(jLabel3, gridBagConstraints);
 
             textFieldDomain.setText(resourceMap.getString("textFieldDomain.text")); // NOI18N
+            textFieldDomain.setMinimumSize(new java.awt.Dimension(100, 20));
             textFieldDomain.setName("textFieldDomain"); // NOI18N
             textFieldDomain.setPreferredSize(new java.awt.Dimension(100, 20));
             gridBagConstraints = new java.awt.GridBagConstraints();
@@ -135,22 +189,10 @@ public class BulkUploader extends javax.swing.JFrame {
             gridBagConstraints.ipady = 1;
             gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
             gridBagConstraints.insets = new java.awt.Insets(4, 0, 1, 5);
-            getContentPane().add(textFieldDomain, gridBagConstraints);
-
-            uploadButton.setText(resourceMap.getString("uploadButton.text")); // NOI18N
-            uploadButton.setName("uploadButton"); // NOI18N
-            uploadButton.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    uploadButtonActionPerformed(evt);
-                }
-            });
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 2;
-            gridBagConstraints.gridy = 3;
-            gridBagConstraints.insets = new java.awt.Insets(20, 0, 0, 0);
-            getContentPane().add(uploadButton, gridBagConstraints);
+            panelAuthCredentials.add(textFieldDomain, gridBagConstraints);
 
             passwordField.setText(resourceMap.getString("passwordField.text")); // NOI18N
+            passwordField.setMinimumSize(new java.awt.Dimension(100, 20));
             passwordField.setName("passwordField"); // NOI18N
             passwordField.setPreferredSize(new java.awt.Dimension(100, 20));
             gridBagConstraints = new java.awt.GridBagConstraints();
@@ -160,36 +202,11 @@ public class BulkUploader extends javax.swing.JFrame {
             gridBagConstraints.ipady = 1;
             gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
             gridBagConstraints.insets = new java.awt.Insets(4, 0, 1, 5);
-            getContentPane().add(passwordField, gridBagConstraints);
+            panelAuthCredentials.add(passwordField, gridBagConstraints);
 
-            chooseFileButton.setText(resourceMap.getString("chooseFileButton.text")); // NOI18N
-            chooseFileButton.setName("chooseFileButton"); // NOI18N
-            chooseFileButton.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    chooseFileButtonActionPerformed(evt);
-                }
-            });
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 0;
-            gridBagConstraints.gridy = 3;
-            gridBagConstraints.ipadx = 2;
-            gridBagConstraints.ipady = 1;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-            gridBagConstraints.insets = new java.awt.Insets(20, 9, 1, 5);
-            getContentPane().add(chooseFileButton, gridBagConstraints);
+            getContentPane().add(panelAuthCredentials, new java.awt.GridBagConstraints());
 
-            textFieldCsvFilePath.setText(resourceMap.getString("textFieldCsvFilePath.text")); // NOI18N
-            textFieldCsvFilePath.setName("textFieldCsvFilePath"); // NOI18N
-            textFieldCsvFilePath.setPreferredSize(new java.awt.Dimension(125, 20));
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 1;
-            gridBagConstraints.gridy = 3;
-            gridBagConstraints.ipadx = 2;
-            gridBagConstraints.ipady = 1;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-            gridBagConstraints.insets = new java.awt.Insets(20, 0, 1, 5);
-            getContentPane().add(textFieldCsvFilePath, gridBagConstraints);
-
+            menuBar.setBorder(javax.swing.BorderFactory.createEtchedBorder());
             menuBar.setName("menuBar"); // NOI18N
 
             fileMenu.setText(resourceMap.getString("fileMenu.text")); // NOI18N
@@ -273,7 +290,8 @@ public class BulkUploader extends javax.swing.JFrame {
 
 				@Override
 				public void run() {
-					textFieldCsvFilePath.setText(csvFileChooser.getSelectedFile().getAbsolutePath());
+					labelCsvFilePath.setText(csvFileChooser.getSelectedFile().getAbsolutePath());
+					labelCsvFilePath.setToolTipText(labelCsvFilePath.getText());
 					setCsvFile(csvFileChooser.getSelectedFile());
 				}
 			});
@@ -282,13 +300,19 @@ public class BulkUploader extends javax.swing.JFrame {
 
 	private void uploadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadButtonActionPerformed
 		//validate input
-		List<String> errors = new ArrayList<String>();
+		final List<String> errors = new ArrayList<String>();
 		if (!guiController.validateInput(errors, textFieldUsername.getText(), passwordField.getPassword(), textFieldDomain.getText(), csvFile)) {
+
+
 			guiController.runInSwingThread(new Runnable() {
 
 				@Override
 				public void run() {
-					
+					final String message = "Please address the following errors.\n\n" + StringUtils.join(errors, "\n");
+					JOptionPane.showMessageDialog(BulkUploader.this,
+							message,
+							"Input Error",
+							JOptionPane.ERROR_MESSAGE);
 				}
 			});
 			return;
@@ -301,10 +325,17 @@ public class BulkUploader extends javax.swing.JFrame {
 	 * @param args the command line arguments
 	 */
 	public static void main(String args[]) {
+
 		java.awt.EventQueue.invokeLater(new Runnable() {
 
 			@Override
 			public void run() {
+				try {
+					//UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+				} catch (Exception e) {
+					Logger.getLogger(BulkUploader.class).error("Error setting LAF", e);
+				}
 				new BulkUploader().setVisible(true);
 			}
 		});
@@ -324,13 +355,15 @@ public class BulkUploader extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel labelCsvFilePath;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem openMenuItem;
+    private javax.swing.JPanel panelAuthCredentials;
+    private javax.swing.JPanel panelChooseFile;
     private javax.swing.JPasswordField passwordField;
     private javax.swing.JMenuItem pasteMenuItem;
     private javax.swing.JMenuItem saveAsMenuItem;
     private javax.swing.JMenuItem saveMenuItem;
-    private javax.swing.JTextField textFieldCsvFilePath;
     private javax.swing.JTextField textFieldDomain;
     private javax.swing.JTextField textFieldUsername;
     private javax.swing.JButton uploadButton;
