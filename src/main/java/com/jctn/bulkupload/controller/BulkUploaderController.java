@@ -4,8 +4,10 @@
  */
 package com.jctn.bulkupload.controller;
 
+import com.jctn.bulkupload.model.User;
 import java.awt.Component;
 import java.io.File;
+import java.util.Collection;
 import java.util.List;
 import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
@@ -18,6 +20,8 @@ import org.apache.commons.lang.StringUtils;
  * @author martin
  */
 public class BulkUploaderController {
+
+	private BulkUserAddController userAddController;
 
 	public void runInSwingThread(Runnable r) {
 		if (SwingUtilities.isEventDispatchThread()) {
@@ -75,9 +79,22 @@ public class BulkUploaderController {
 		});
 	}
 
-	public void startUpload(String text, char[] password, String domain, File csvFile) {
+	/**
+	 * Delegates to the webservice controller for parsing and uploading the data.
+	 * @param adminUsername
+	 * @param adminPassword
+	 * @param domain
+	 * @param csvFile
+	 * @throws Exception
+	 */
+	public void startUpload(String adminUsername, char[] adminPassword, String domain, File csvFile) throws Exception {
+		if (userAddController == null) {
+			userAddController = new BulkUserAddController(adminUsername, new String(adminPassword), domain, true);
+		}
 		//parse the file
+		Collection<User> users = userAddController.parseCsv(csvFile);
 		//submit the parsed lines for processing
+		userAddController.bulkUpload(users);
 	}
 
 	/**
