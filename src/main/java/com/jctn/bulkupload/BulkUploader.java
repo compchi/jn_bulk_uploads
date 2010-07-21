@@ -26,6 +26,7 @@ import org.apache.log4j.Logger;
  */
 public class BulkUploader extends javax.swing.JFrame {
 
+	private static Logger logger = Logger.getLogger(BulkUploader.class);
 	private BulkUploaderController guiController;
 	private File csvFile;
 
@@ -302,8 +303,6 @@ public class BulkUploader extends javax.swing.JFrame {
 		//validate input
 		final List<String> errors = new ArrayList<String>();
 		if (!guiController.validateInput(errors, textFieldUsername.getText(), passwordField.getPassword(), textFieldDomain.getText(), csvFile)) {
-
-
 			guiController.runInSwingThread(new Runnable() {
 
 				@Override
@@ -317,8 +316,24 @@ public class BulkUploader extends javax.swing.JFrame {
 			});
 			return;
 		}
+
 		//start the magic
-		guiController.startUpload(textFieldUsername.getText(), passwordField.getPassword(), textFieldDomain.getText(), csvFile);
+		guiController.runInSwingThread(new Runnable() {
+
+			@Override
+			public void run() {
+				try {
+					guiController.startUpload(textFieldUsername.getText(), passwordField.getPassword(), textFieldDomain.getText(), csvFile);
+				} catch (Exception e) {
+					logger.error("Error processing file", e);
+					JOptionPane.showMessageDialog(BulkUploader.this,
+							"There was an error processing the file. Please see logs for details.",
+							"Processing Error",
+							JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
+
 	}//GEN-LAST:event_uploadButtonActionPerformed
 
 	/**
