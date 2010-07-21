@@ -6,10 +6,12 @@ package com.jctn.bulkupload.controller;
 
 import java.awt.Component;
 import java.io.File;
+import java.util.List;
 import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileSystemView;
+import org.apache.commons.lang.StringUtils;
 
 /**
  *
@@ -76,5 +78,39 @@ public class BulkUploaderController {
 	public void startUpload(String text, char[] password, String domain, File csvFile) {
 		//parse the file
 		//submit the parsed lines for processing
+	}
+
+	/**
+	 * Returns true/false depending on if the input is valid.
+	 * @param errors List of errors is stored here. It is cleared before the input is processed.
+	 * @param adminUsername Admin username
+	 * @param password Admin password
+	 * @param adminDomain Admin domain
+	 * @param csvFile CSV file to process
+	 * @return true if no errors
+	 */
+	public boolean validateInput(List<String> errors, String adminUsername, char[] password, String adminDomain, File csvFile) {
+		errors.clear();
+		try {
+			if (StringUtils.isEmpty(adminUsername)) {
+				errors.add("username is blank.");
+			}
+
+			if (StringUtils.isEmpty(adminDomain)) {
+				errors.add("domain is blank.");
+			}
+
+			if (password == null || password.length == 0 || StringUtils.isEmpty(new String(password))) {
+				errors.add("password is blank");
+			}
+
+			if (csvFile == null || !csvFile.canRead()) {
+				errors.add("csv file not readable");
+			}
+		} catch (Exception e) {
+			errors.add("Unknown error: " + e.toString());
+		}
+
+		return errors.isEmpty();
 	}
 }

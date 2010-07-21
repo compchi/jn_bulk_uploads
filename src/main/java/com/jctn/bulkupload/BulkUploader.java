@@ -12,6 +12,8 @@ package com.jctn.bulkupload;
 
 import com.jctn.bulkupload.controller.BulkUploaderController;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JFileChooser;
 
 /**
@@ -280,6 +282,17 @@ public class BulkUploader extends javax.swing.JFrame {
 
 	private void uploadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadButtonActionPerformed
 		//validate input
+		List<String> errors = new ArrayList<String>();
+		if (!guiController.validateInput(errors, textFieldUsername.getText(), passwordField.getPassword(), textFieldDomain.getText(), csvFile)) {
+			guiController.runInSwingThread(new Runnable() {
+
+				@Override
+				public void run() {
+					
+				}
+			});
+			return;
+		}
 		//start the magic
 		guiController.startUpload(textFieldUsername.getText(), passwordField.getPassword(), textFieldDomain.getText(), csvFile);
 	}//GEN-LAST:event_uploadButtonActionPerformed
