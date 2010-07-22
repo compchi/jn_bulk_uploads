@@ -105,6 +105,8 @@ public class BulkUserAddController {
 		StrTokenizer tokenizer = StrTokenizer.getCSVInstance();
 		tokenizer.setIgnoreEmptyTokens(false);
 		Collection<User> results = new ArrayList<User>(20);
+		//skip the first line
+		line = reader.readLine();
 		while ((line = reader.readLine()) != null) {
 			tokenizer.reset(line);
 			try {
@@ -174,8 +176,17 @@ public class BulkUserAddController {
 		logger.debug("Step 1: UserAdd");
 		boolean usenamesGood = false;
 		int suffix = 1;
+		String originalAuthUsername = null;
+		String originalUsername = null;
 		while (!usenamesGood) {
 			execUserAdd(user);
+			if(originalAuthUsername == null){
+				originalAuthUsername = user.getAuthUsername();
+			}
+			if(originalUsername == null){
+				originalUsername = user.getUsername();
+			}
+
 			if (StringUtils.isEmpty(user.getError())) {
 				break;
 			}
@@ -183,8 +194,26 @@ public class BulkUserAddController {
 			//@TODO: see what kind of error message is retuned for existing username and auth_username
 			//and leverage here
 			if (user.getError().contains("username") || user.getError().contains("auth_username")) {
-				user.setAuthUsername(user.getAuthUsername() + suffix++);
-				user.setUsername(user.getUsername() + suffix++);
+				String suffixStr = suffix + "";
+				user.setUsername(originalUsername);
+				user.setAuthUsername(originalAuthUsername);
+				{
+					String currentAuthName = user.getAuthUsername();
+					if ((suffixStr + currentAuthName).length() > 32) {
+						currentAuthName = currentAuthName.substring(0, (32 - suffixStr.length()));
+					}
+
+					user.setAuthUsername(currentAuthName + suffixStr);
+				}
+				{
+					String currentUsername = user.getUsername();
+					if ((suffixStr + currentUsername).length() > 32) {
+						currentUsername = currentUsername.substring(0, (32 - suffixStr.length()));
+					}
+					user.setUsername(currentUsername + suffixStr);
+				}
+				suffix++;
+				user.setError(null);
 			} else {
 				usenamesGood = true;
 			}
@@ -201,8 +230,8 @@ public class BulkUserAddController {
 		}
 
 		//If the user doesn't want voice mail, we're done.
-		logger.debug("User does not want voicemail. All done.");
 		if (!user.isAddVoicemail()) {
+			logger.debug("User does not want voicemail. All done.");
 			return;
 		}
 		//add vm box--VoicemailoboxAdd
@@ -314,9 +343,13 @@ public class BulkUserAddController {
 		params.put(UserAdd.PARAM_SESSION_ID, getSessionId());
 		UserAdd userAdd = new UserAdd();
 		//Username and authusername
-		user.setAuthUsername(userAdd.createAuthUsername(user.getEmail(), adminDomain));
-		user.setUsername(userAdd.createUsername(user.getEmail().split("@")[0]));
+		if (user.getAuthUsername() == null) {
+			user.setAuthUsername(userAdd.createAuthUsername(user.getEmail(), adminDomain));
+		}
 
+		if (user.getUsername() == null) {
+			user.setUsername(userAdd.createUsername(user.getEmail().split("@")[0]));
+		}
 		params.put(UserAdd.PARAM_ORGANIZATION_ID, getOrganizationId() + "");
 		params.put(UserAdd.PARAM_USERNAME, user.getUsername());
 		params.put(UserAdd.PARAM_AUTH_USERNAME, user.getAuthUsername());
@@ -344,7 +377,7 @@ public class BulkUserAddController {
 		params.put(UserAliasAdd.PARAM_SESSION_ID, getSessionId());
 		params.put(UserAliasAdd.PARAM_ORGANIZATION_ID, getOrganizationId() + "");
 		params.put(UserAliasAdd.PARAM_ALIAS_USERNAME, user.getExtension() + "");
-		params.put(UserAliasAdd.PARAM_ADDRESS_USERNAME, user.getAuthUsername());
+		params.put(UserAliasAdd.PARAM_ADDRESS_USERNAME, user.getUsername());
 		UserAliasAddResponse response = userAliasAdd.sendRequest(params);
 		if (validateResponse(response)) {
 			logger.debug("Adding user alias: " + response.getExtension());
@@ -371,6 +404,7 @@ public class BulkUserAddController {
 		params.put(VoicemailboxAdd.PARAM_FULLNAME, user.getFullName());
 		params.put(VoicemailboxAdd.PARAM_MAILBOX, user.getExtension() + "");
 		params.put(VoicemailboxAdd.PARAM_VMBOX_ID, user.getExtension() + "");
+		params.put(VoicemailboxAdd.PARAM_DOMAIN, adminDomain);
 		VoicemailboxAddResponse response = voicemailboxAdd.sendRequest(params);
 		if (validateResponse(response)) {
 			logger.debug("Mailbox added: " + response.getVmBoxId());
@@ -387,9 +421,9 @@ public class BulkUserAddController {
 	void execUserAddressEdit(User user, UserAddressEdit userAddressEdit) throws IOException {
 		Map params = new HashMap();
 		params.put(UserAddressEdit.PARAM_SESSION_ID, getSessionId());
-		params.put(UserAddressEdit.PARAM_ADDRESS, user.getAuthUsername() + "@" + this.adminDomain);
+		params.put(UserAddressEdit.PARAM_ADDRESS, user.getUsername() + "@" + this.adminDomain);
 		params.put(UserAddressEdit.PARAM_DEFAULT_ADDRESS, user.getVmUsername() + "@" + this.adminDomain);
-		params.put(UserAddressEdit.PARAM_USERNAME, user.getAuthUsername());
+		params.put(UserAddressEdit.PARAM_USERNAME, user.getUsername());
 		params.put(UserAddressEdit.PARAM_USER_ID, user.getUserId() + "");
 		UserAddressEditResponse response = userAddressEdit.sendRequest(params);
 		if (validateResponse(response)) {

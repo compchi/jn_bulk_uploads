@@ -63,7 +63,7 @@ public class BulkUploaderController {
 
 					@Override
 					public boolean accept(File f) {
-						return f.getPath().toLowerCase().endsWith(".csv");
+						return f.isDirectory() || f.getPath().toLowerCase().endsWith(".csv");
 					}
 
 					@Override
