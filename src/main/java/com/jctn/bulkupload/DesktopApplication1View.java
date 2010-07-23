@@ -85,7 +85,7 @@ public class DesktopApplication1View extends FrameView {
     public void showAboutBox() {
         if (aboutBox == null) {
             JFrame mainFrame = DesktopApplication1.getApplication().getMainFrame();
-            aboutBox = new DesktopApplication1AboutBox(mainFrame);
+            aboutBox = new AboutDialog(mainFrame);
             aboutBox.setLocationRelativeTo(mainFrame);
         }
         DesktopApplication1.getApplication().show(aboutBox);
