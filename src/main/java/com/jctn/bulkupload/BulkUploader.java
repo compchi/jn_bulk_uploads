@@ -271,9 +271,11 @@ public class BulkUploader extends javax.swing.JFrame {
             menuBar.setBorder(javax.swing.BorderFactory.createEtchedBorder());
             menuBar.setName("menuBar"); // NOI18N
 
+            fileMenu.setMnemonic('F');
             fileMenu.setText(resourceMap.getString("fileMenu.text")); // NOI18N
             fileMenu.setName("fileMenu"); // NOI18N
 
+            exitMenuItem.setMnemonic('x');
             exitMenuItem.setText(resourceMap.getString("exitMenuItem.text")); // NOI18N
             exitMenuItem.setName("exitMenuItem"); // NOI18N
             exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -285,9 +287,11 @@ public class BulkUploader extends javax.swing.JFrame {
 
             menuBar.add(fileMenu);
 
+            helpMenu.setMnemonic('H');
             helpMenu.setText(resourceMap.getString("helpMenu.text")); // NOI18N
             helpMenu.setName("helpMenu"); // NOI18N
 
+            aboutMenuItem.setMnemonic('A');
             aboutMenuItem.setText(resourceMap.getString("aboutMenuItem.text")); // NOI18N
             aboutMenuItem.setName("aboutMenuItem"); // NOI18N
             aboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
