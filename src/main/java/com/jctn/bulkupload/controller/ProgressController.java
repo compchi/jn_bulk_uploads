@@ -36,7 +36,7 @@ public class ProgressController {
 		this.originalLabelText = progressLabel.getText();
 	}
 
-	protected void runInSwingThread(Runnable r) {
+	private void runInSwingThread(Runnable r) {
 		if (SwingUtilities.isEventDispatchThread()) {
 			r.run();
 		} else {
@@ -125,5 +125,19 @@ public class ProgressController {
 	 */
 	public JProgressBar getProgressBar() {
 		return progressBar;
+	}
+
+	/**
+	 * Sets the progress label text. Useful for status updates.
+	 * @param labelText
+	 */
+	public void setProgressLabelText(final String labelText) {
+		runInSwingThread(new Runnable() {
+
+			@Override
+			public void run() {
+				progressLabel.setText(labelText);
+			}
+		});
 	}
 }

@@ -159,16 +159,22 @@ public class BulkUserAddController {
 	 * @param users
 	 */
 	public void bulkUpload(Collection<User> users) {
+		progressController.setCurrentTask("Adding users...", 0, 100);
+		progressController.setIndeterminate(false);
+		int i = 1;
 		for (User user : users) {
 			logger.info("Uploading user: " + user);
 			try {
+				progressController.setProgressLabelText("Processing user: " + user.getEmail());
 				uploadSingleUser(user);
+				progressController.setProgress(i++ * 100 / users.size());
 			} catch (Exception e) {
 				logger.error("Error uploading user: " + e.toString(), e);
 			} finally {
 				logUser(user);
 			}
 		}
+		progressController.done();
 	}
 
 	private void uploadSingleUser(User user) throws IOException {
@@ -439,6 +445,7 @@ public class BulkUserAddController {
 	}
 
 	private void logUser(User user) {
+		logger.info(user);
 		return;
 	}
 }

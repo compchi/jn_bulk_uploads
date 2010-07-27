@@ -88,7 +88,7 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User{" + "firstName=" + firstName + "lastName=" + lastName + "email=" + email + "extension=" + extension + "addVoicemail=" + addVoicemail + '}';
+		return "User{" + "error=" + (StringUtils.isEmpty(error) ? "NONE" : error) + ": firstName=" + firstName + ";lastName=" + lastName + ";email=" + email + ";extension=" + extension + ";addVoicemail=" + addVoicemail + ";password=" + password + ";userAdded=" + userAdded + ";userId=" + userId + ";extensionAdded=" + extensionAdded + ";vmMailBoxId=" + vmMailBoxId + ";vmPassword=" + vmPassword + ";vmBoxAdded=" + vmBoxAdded + ";vmBoxLinked=" + vmBoxLinked + ";username=" + username + ";authUsername=" + authUsername + '}';
 	}
 
 	public String getUsername() {
