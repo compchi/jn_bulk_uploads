@@ -11,6 +11,7 @@
 package com.jctn.bulkupload;
 
 import com.jctn.bulkupload.controller.BulkUploaderController;
+import com.jctn.bulkupload.controller.ProgressController;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +65,6 @@ public class BulkUploader extends javax.swing.JFrame {
         jSeparator2 = new javax.swing.JSeparator();
         statusPanel = new javax.swing.JPanel();
         statusMessageLabel = new javax.swing.JLabel();
-        statusAnimationLabel = new javax.swing.JLabel();
         progressBar = new javax.swing.JProgressBar();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
@@ -233,10 +233,8 @@ public class BulkUploader extends javax.swing.JFrame {
             statusPanel.setName("statusPanel"); // NOI18N
             statusPanel.setPreferredSize(new java.awt.Dimension(500, 35));
 
+            statusMessageLabel.setText(resourceMap.getString("statusMessageLabel.text")); // NOI18N
             statusMessageLabel.setName("statusMessageLabel"); // NOI18N
-
-            statusAnimationLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-            statusAnimationLabel.setName("statusAnimationLabel"); // NOI18N
 
             progressBar.setName("progressBar"); // NOI18N
 
@@ -244,20 +242,24 @@ public class BulkUploader extends javax.swing.JFrame {
             statusPanel.setLayout(statusPanelLayout);
             statusPanelLayout.setHorizontalGroup(
                 statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(statusMessageLabel)
-                .addComponent(statusAnimationLabel)
                 .addGroup(statusPanelLayout.createSequentialGroup()
-                    .addGap(333, 333, 333)
-                    .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addContainerGap()
+                    .addComponent(statusMessageLabel)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 299, Short.MAX_VALUE)
+                    .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap())
             );
             statusPanelLayout.setVerticalGroup(
                 statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(statusPanelLayout.createSequentialGroup()
                     .addGroup(statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(statusMessageLabel)
-                        .addComponent(statusAnimationLabel))
-                    .addGap(8, 8, 8)
-                    .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, statusPanelLayout.createSequentialGroup()
+                            .addContainerGap(13, Short.MAX_VALUE)
+                            .addComponent(statusMessageLabel))
+                        .addGroup(statusPanelLayout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addContainerGap())
             );
 
             gridBagConstraints = new java.awt.GridBagConstraints();
@@ -350,7 +352,7 @@ public class BulkUploader extends javax.swing.JFrame {
 			@Override
 			public void run() {
 				try {
-					guiController.startUpload(textFieldUsername.getText(), passwordField.getPassword(), textFieldDomain.getText(), csvFile);
+					guiController.startUpload(new ProgressController(progressBar, statusMessageLabel), textFieldUsername.getText(), passwordField.getPassword(), textFieldDomain.getText(), csvFile);
 				} catch (Exception e) {
 					logger.error("Error processing file", e);
 					guiController.runInSwingThread(new Runnable() {
@@ -423,7 +425,6 @@ public class BulkUploader extends javax.swing.JFrame {
     private javax.swing.JPasswordField passwordField;
     private javax.swing.JProgressBar progressBar;
     private javax.swing.JPanel startButtonPanel;
-    private javax.swing.JLabel statusAnimationLabel;
     private javax.swing.JLabel statusMessageLabel;
     private javax.swing.JPanel statusPanel;
     private javax.swing.JTextField textFieldDomain;

@@ -87,9 +87,9 @@ public class BulkUploaderController {
 	 * @param csvFile
 	 * @throws Exception
 	 */
-	public void startUpload(String adminUsername, char[] adminPassword, String domain, File csvFile) throws Exception {
+	public void startUpload(ProgressController progressController, String adminUsername, char[] adminPassword, String domain, File csvFile) throws Exception {
 		if (userAddController == null) {
-			userAddController = new BulkUserAddController(adminUsername, new String(adminPassword), domain, true);
+			userAddController = new BulkUserAddController(progressController, adminUsername, new String(adminPassword), domain, true);
 		}
 		//parse the file
 		Collection<User> users = userAddController.parseCsv(csvFile);

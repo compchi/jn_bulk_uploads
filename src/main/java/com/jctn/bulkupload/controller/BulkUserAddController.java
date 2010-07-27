@@ -47,11 +47,13 @@ public class BulkUserAddController {
 	private String adminDomain;
 	private String sessionId;
 	private Long organizationId;
+	private final ProgressController progressController;
 
-	public BulkUserAddController(String adminUsername, String adminPassword, String adminDomain, boolean createSession) {
+	public BulkUserAddController(ProgressController progressController, String adminUsername, String adminPassword, String adminDomain, boolean createSession) {
 		this.adminUsername = adminUsername;
 		this.adminPassword = adminPassword;
 		this.adminDomain = adminDomain;
+		this.progressController = progressController;
 		if (createSession) {
 			initSession();
 		}
@@ -180,10 +182,10 @@ public class BulkUserAddController {
 		String originalUsername = null;
 		while (!usenamesGood) {
 			execUserAdd(user);
-			if(originalAuthUsername == null){
+			if (originalAuthUsername == null) {
 				originalAuthUsername = user.getAuthUsername();
 			}
-			if(originalUsername == null){
+			if (originalUsername == null) {
 				originalUsername = user.getUsername();
 			}
 

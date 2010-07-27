@@ -38,7 +38,7 @@ public class BulkUserAddControllerTest extends AbstractJunctionWSTest {
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		controller = new BulkUserAddController("mccomputerconsulting", "ons1pAcc3s5", "mccomputerconsulting.onsip.com", false);
+		controller = new BulkUserAddController(null, "mccomputerconsulting", "ons1pAcc3s5", "mccomputerconsulting.onsip.com", false);
 		//controller.setAdminUsername("mccomputerconsulting");
 		//controller.setAdminPassword("ons1pAcc3s5");
 		//controller.setAdminDomain("mccomputerconsulting.onsip.com");
