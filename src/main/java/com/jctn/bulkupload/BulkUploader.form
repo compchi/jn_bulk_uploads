@@ -243,6 +243,9 @@
               <Dimension value="[300, 14]"/>
             </Property>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="if(csvFile != null &amp;&amp; csvFile.canRead()){&#xd;&#xa;&#x9;labelCsvFilePath.setText(csvFile.getPath());&#xd;&#xa;}"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>

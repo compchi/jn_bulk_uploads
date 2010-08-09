@@ -197,6 +197,9 @@ public class BulkUploader extends javax.swing.JFrame {
             labelCsvFilePath.setMaximumSize(new java.awt.Dimension(400, 14));
             labelCsvFilePath.setName("labelCsvFilePath"); // NOI18N
             labelCsvFilePath.setPreferredSize(new java.awt.Dimension(300, 14));
+            if(csvFile != null && csvFile.canRead()){
+                labelCsvFilePath.setText(csvFile.getPath());
+            }
             panelChooseFile.add(labelCsvFilePath);
 
             gridBagConstraints = new java.awt.GridBagConstraints();
@@ -394,7 +397,7 @@ public class BulkUploader extends javax.swing.JFrame {
 	/**
 	 * @param args the command line arguments
 	 */
-	public static void main(String args[]) {
+	public static void main(final String args[]) {
 
 		java.awt.EventQueue.invokeLater(new Runnable() {
 
@@ -406,7 +409,19 @@ public class BulkUploader extends javax.swing.JFrame {
 				} catch (Exception e) {
 					Logger.getLogger(BulkUploader.class).error("Error setting LAF", e);
 				}
-				new BulkUploader().setVisible(true);
+				//Create a new instance of this class
+				BulkUploader bu = new BulkUploader();
+				//Process any args
+				if(args.length > 0){
+					//First expected to be the path to the CSV file
+					String filePath = args[0];
+					File csv = new File(filePath);
+					if (csv != null && csv.canRead()){
+						bu.setCsvFile(csv);
+						bu.labelCsvFilePath.setText(filePath);
+					}
+				}
+				bu.setVisible(true);
 			}
 		});
 	}
