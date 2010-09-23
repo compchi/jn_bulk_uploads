@@ -12,6 +12,7 @@ package com.jctn.bulkupload;
 
 import com.jctn.bulkupload.controller.BulkUploaderController;
 import com.jctn.bulkupload.controller.ProgressController;
+import com.jctn.bulkupload.util.LogFactory;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,7 @@ import org.apache.log4j.Logger;
  */
 public class BulkUploader extends javax.swing.JFrame {
 
-	private static Logger logger = Logger.getLogger(BulkUploader.class);
+	private static Logger logger = LogFactory.getLogger(BulkUploader.class);
 	private BulkUploaderController guiController;
 	private File csvFile;
 
@@ -407,7 +408,7 @@ public class BulkUploader extends javax.swing.JFrame {
 					//UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
 					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 				} catch (Exception e) {
-					Logger.getLogger(BulkUploader.class).error("Error setting LAF", e);
+					LogFactory.getLogger(BulkUploader.class).error("Error setting LAF", e);
 				}
 				//Create a new instance of this class
 				BulkUploader bu = new BulkUploader();

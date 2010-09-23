@@ -18,6 +18,7 @@ import com.jctn.bulkupload.service.ws.UserAdd;
 import com.jctn.bulkupload.service.ws.UserAddressEdit;
 import com.jctn.bulkupload.service.ws.UserAliasAdd;
 import com.jctn.bulkupload.service.ws.VoicemailboxAdd;
+import com.jctn.bulkupload.util.LogFactory;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -41,7 +42,7 @@ import org.apache.log4j.Logger;
  */
 public class BulkUserAddController {
 
-	private static final Logger logger = Logger.getLogger(BulkUserAddController.class);
+	private static final Logger logger = LogFactory.getLogger(BulkUserAddController.class);
 	private String adminUsername;
 	private String adminPassword;
 	private String adminDomain;

@@ -1,5 +1,6 @@
 package com.jctn.bulkupload.controller;
 
+import com.jctn.bulkupload.util.LogFactory;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
@@ -12,7 +13,7 @@ import org.apache.log4j.Logger;
  */
 public class ProgressController {
 
-	private static final Logger logger = Logger.getLogger(ProgressController.class);
+	private static final Logger logger = LogFactory.getLogger(ProgressController.class);
 	JProgressBar progressBar;
 	JLabel progressLabel;
 	final String originalLabelText;
